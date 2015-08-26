@@ -164,6 +164,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
             resultString.insert(0, String.valueOf(r));
         }
 
+        // Reading the rest of sumando1.
         for (int i = diff - 1; i >= 0; i--) {
             Digit digit = sumando1.digits.get(i);
             int z = digit.getDigit() + carriage;
