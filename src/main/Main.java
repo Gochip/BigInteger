@@ -15,7 +15,9 @@ import static org.junit.Assert.assertEquals;
 public class Main {
 
     public static void main(String args[]) {
-        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("923132213563");
+        
+        
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("923132213563", 32423);
         System.out.println(bigOriginal1.shiftRight(5).toString(2));
 //        BigIntegerBytesList big = new math.BigIntegerBytesList("-001111000000000001111111111110011110000000000011111111111100111100000000000111111111111001111000000000001111111111110011110000000000011111111111100", 2);
 //        System.out.println(bigOriginal1.toString());

@@ -67,7 +67,9 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
             StringBuilder resString = new StringBuilder();
             for (int i = 0; i < val.length; i++) {
                 String v = Integer.toBinaryString(val[i]);
+                // Substring for negatives.
                 v = v.substring(Math.max(v.length() - 8, 0));
+                // v.length() <= 8
                 while (v.length() < 8) {
                     v = "0" + v;
                 }
@@ -76,6 +78,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
             String complement = complement(resString.toString());
             for (int i = 0, j = 0; i < complement.length(); i += 8, j++) {
                 String part = complement.substring(i, i + 8);
+                // Byte.parseByte no se puede utilizar porque solo puede hasta 7 bits.
                 short aux = Short.parseShort(part, 2);
                 res[j] = (byte) aux;
             }
@@ -114,6 +117,9 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     }
 
     public BigIntegerBytesList(String val, int radix) {
+        if (radix < Character.MIN_RADIX || radix > Character.MAX_RADIX) {
+            throw new NumberFormatException("Radix out of range");
+        }
         if (val.charAt(0) == '-') {
             this.negative = true;
         }
@@ -122,12 +128,18 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
             // Ignore the first digit, i.e. the sign.
             until = 1;
         }
+        BigIntegerBytesList bigRadix = new BigIntegerBytesList(String.valueOf(radix));
         BigIntegerBytesList mult = ONE;
         BigIntegerBytesList big = ZERO;
         for (int i = val.length() - 1; i >= until; i--) {
             String dig = String.valueOf(val.charAt(i));
-            big = big.add(mult.multiply(new BigIntegerBytesList(dig)));
-            mult = mult.add(mult);
+            BigIntegerBytesList bigDig = new BigIntegerBytesList(dig);
+            if (bigDig.compareTo(bigRadix) < 0) {
+                big = big.add(mult.multiply(bigDig));
+                mult = mult.add(mult);
+            } else {
+                throw new NumberFormatException("Error en el formato del número: " + val);
+            }
         }
         this.digits = big.digits;
     }
