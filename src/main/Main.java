@@ -17,8 +17,9 @@ public class Main {
     public static void main(String args[]) {
         
         
-        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("923132213563", 32423);
-        System.out.println(bigOriginal1.shiftRight(5).toString(2));
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("923132213563");
+        System.out.println(bigOriginal1.toString(2));
+        System.out.println(bigOriginal1.bitLength());
         
 //        BigIntegerBytesList big = new math.BigIntegerBytesList("-001111000000000001111111111110011110000000000011111111111100111100000000000111111111111001111000000000001111111111110011110000000000011111111111100", 2);
 //        System.out.println(bigOriginal1.toString());
@@ -27,13 +28,14 @@ public class Main {
 //        java.math.BigInteger bigOriginal2 = new java.math.BigInteger("-875287965485");
 //        System.out.println(Arrays.toString(bigOriginal1.toByteArray()));
         
-        System.out.println(bigOriginal1.shiftRight(5));
-        AbstractBigInteger big1 = new math.BigIntegerBytesList("923132213563");
         
+        AbstractBigInteger big1 = new math.BigIntegerBytesList("923132213563");
+        System.out.println(big1.toString(2));
+        System.out.println(big1.bitLength());
         
 //        AbstractBigInteger big2 = new math.BigIntegerBytesList("-875287965485");
 //        System.out.println(Arrays.toString(big1.toByteArray()));
-        System.out.println(big1.shiftRight(5));
+//        System.out.println(big1.shiftRight(5));
 //        AbstractBigInteger big2 = new math.BigIntegerBytesList(new byte[]{-4, 10, 125, -45});
 
 //        BigInteger big = new BigInteger("-1115648995623");
