@@ -255,7 +255,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public int bitLength() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return toString(2).length();
     }
 
     @Override
@@ -657,7 +657,28 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public boolean isProbablePrime(int certainty) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for (int i = 0; i < certainty; i++) {
+            BigIntegerBytesList a = new BigIntegerBytesList(this.bitLength(), new Random());
+            BigIntegerBytesList n1 = this.subtract(ONE);
+            BigIntegerBytesList r = null;
+            if (this.mod(TWO).compareTo(ZERO) == 0) {
+                // If its even.
+                BigIntegerBytesList tmp = n1.divide(TWO);
+                r = a.pow(tmp.intValue()).mod(this);
+            } else {
+                BigIntegerBytesList tmp = n1.divide(TWO);
+                r = a.pow(tmp.intValue()).mod(this);
+            }
+            if (r.compareTo(ONE) != 0 && (r.compareTo(n1) != 0)) {
+                return true;
+            }
+            BigIntegerBytesList s = a.divide(this);
+            BigIntegerBytesList diff = r.subtract(s);
+            if (this.mod(diff).compareTo(ZERO) == 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -812,9 +833,9 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     @Override
     public int signum() {
         int sig = 1;
-        if(this.negative){
+        if (this.negative) {
             sig = -1;
-        }else if(this.digits.get(0).getDigit() == 0){
+        } else if (this.digits.get(0).getDigit() == 0) {
             sig = 0;
         }
         return sig;
