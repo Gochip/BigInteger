@@ -1244,4 +1244,24 @@ public class BigIntegerBytesListTest {
         big1 = createNumber(new byte[]{-1, 52, -63, 58, 58, 75, 75, 85, -56, -12, -0, 1, 0, 4, 0, 5, 6});
         assertEquals(bigOriginal1.toString(), big1.toString());
     }
+    
+    //Test signum()
+    @Test
+    public void testSignum(){
+        java.math.BigInteger bigOriginal = new java.math.BigInteger("25669856555");
+        AbstractBigInteger big = createNumber("25669856555");
+        assertEquals(bigOriginal.signum(),big.signum());
+        
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("-122545862");
+        AbstractBigInteger big1 = createNumber("-122545862");
+        assertEquals(bigOriginal1.signum(),big1.signum());
+        
+        java.math.BigInteger bigOriginal2 = new java.math.BigInteger("0000");
+        AbstractBigInteger big2 = createNumber("0000");
+        assertEquals(bigOriginal2.signum(),big2.signum());
+        
+        java.math.BigInteger bigOriginal3 = new java.math.BigInteger("-0000");
+        AbstractBigInteger big3 = createNumber("-0000");
+        assertEquals(bigOriginal3.signum(),big3.signum());
+    }
 }

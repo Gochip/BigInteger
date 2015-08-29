@@ -55,6 +55,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         // Special cases: -0 or 0
         if (digits.isEmpty()) {
             digits.add(new Digit((byte) 0));
+            this.negative = false;
         }
     }
 
@@ -800,7 +801,13 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public int signum() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int sig = 1;
+        if(this.negative){
+            sig = -1;
+        }else if(this.digits.get(0).getDigit() == 0){
+            sig = 0;
+        }
+        return sig;
     }
 
     @Override
