@@ -742,7 +742,17 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public BigIntegerBytesList pow(int exponent) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(exponent < 0){
+            throw new ArithmeticException("Exponent is negative");
+        }
+        if(exponent == 0){
+            return ONE;
+        }
+        BigIntegerBytesList res = (BigIntegerBytesList) this.clone();
+        for (int i = 0; i < exponent-1; i++) {
+            res = res.multiply(this);
+        }
+        return res;
     }
 
     @Override

@@ -1264,4 +1264,29 @@ public class BigIntegerBytesListTest {
         AbstractBigInteger big3 = createNumber("-0000");
         assertEquals(bigOriginal3.signum(),big3.signum());
     }
+    
+    //Test pow()
+    @Test
+    public void testPow(){
+        java.math.BigInteger bigO = new BigInteger("256");
+        AbstractBigInteger big = createNumber("256");
+        assertEquals(bigO.pow(7).toString(),big.pow(7).toString());
+        
+        java.math.BigInteger bigO1 = new BigInteger("256");
+        AbstractBigInteger big1 = createNumber("256");
+        assertEquals(bigO1.pow(0).toString(),big1.pow(0).toString());
+    
+        java.math.BigInteger bigO2 = new BigInteger("5500");
+        AbstractBigInteger big2 = createNumber("5500");
+        assertEquals(bigO2.pow(100).toString(),big2.pow(100).toString());
+    }
+    
+    @Test
+    public void testPowArithmeticException(){
+        AbstractBigInteger big2 = createNumber("256");
+        exception.expect(ArithmeticException.class);
+        big2.pow(-2);
+    }
+    
+    
 }
