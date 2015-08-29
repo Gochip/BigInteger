@@ -114,7 +114,22 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     }
 
     public BigIntegerBytesList(String val, int radix) {
-
+        if (val.charAt(0) == '-') {
+            this.negative = true;
+        }
+        int until = 0;
+        if (val.charAt(0) == '+' || val.charAt(0) == '-') {
+            // Ignore the first digit, i.e. the sign.
+            until = 1;
+        }
+        BigIntegerBytesList mult = ONE;
+        BigIntegerBytesList big = ZERO;
+        for (int i = val.length() - 1; i >= until; i--) {
+            String dig = String.valueOf(val.charAt(i));
+            big = big.add(mult.multiply(new BigIntegerBytesList(dig)));
+            mult = mult.add(mult);
+        }
+        this.digits = big.digits;
     }
 
     @Override
@@ -530,17 +545,6 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     }
 
     @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        boolean FirstDigitIsNotZero = digits.get(0).getDigit() != 0;
-        sb.append((negative && FirstDigitIsNotZero) ? "-" : "");
-        for (Digit digit : digits) {
-            sb.append(digit.getDigit());
-        }
-        return sb.toString();
-    }
-
-    @Override
     public boolean equals(Object obj) {
         return this.toString().equals(obj.toString());
     }
@@ -631,26 +635,6 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
             char letters[] = new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
             return String.valueOf(letters[n - 10]);
         }
-    }
-
-    @Override
-    public String toString(int radix) {
-        if (radix < Character.MIN_RADIX || radix > Character.MAX_RADIX) {
-            return toString();
-        }
-        BigIntegerBytesList radixBigInteger = new BigIntegerBytesList(String.valueOf(radix));
-        BigIntegerBytesList quotient = (BigIntegerBytesList) this.clone();
-        StringBuilder resultString = new StringBuilder();
-        while (quotient.abs().compareTo(ZERO) != 0) {
-            BigIntegerBytesList[] tmp = quotient.divideAndRemainder(radixBigInteger);
-            quotient = tmp[0];
-            String remainder = getNumbersOrLetters(tmp[1].abs().intValue());
-            resultString.insert(0, remainder);
-        }
-        if (quotient.negative) {
-            resultString.insert(0, "-");
-        }
-        return resultString.toString();
     }
 
     @Override
@@ -760,17 +744,82 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public BigIntegerBytesList shiftLeft(int n) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (n < 0) {
+            return shiftRight(n * -1);
+        }
+        String binary = toString(2);
+        StringBuilder displacement = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            displacement.append("0");
+        }
+        StringBuilder resultString = new StringBuilder(displacement);
+        resultString.insert(0, binary);
+        BigIntegerBytesList result = new BigIntegerBytesList(resultString.toString(), 2);
+        return result;
     }
 
     @Override
     public BigIntegerBytesList shiftRight(int n) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (n < 0) {
+            return shiftLeft(n * -1);
+        }
+        String binary = toString(2);
+        String padding = "0";
+        if (negative) {
+            binary = complement(binary);
+            padding = "1";
+        }
+        StringBuilder displacement = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            displacement.append(padding);
+        }
+        StringBuilder resultString = new StringBuilder(displacement);
+        resultString.append(binary.substring(0, binary.length() - n));
+        String rs = null;
+        if (negative) {
+            rs = complement(resultString.toString());
+        } else {
+            rs = resultString.toString();
+        }
+        BigIntegerBytesList result = new BigIntegerBytesList(rs, 2);
+        result.negative = negative;
+        return result;
     }
 
     @Override
     public int signum() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String toString(int radix) {
+        if (radix < Character.MIN_RADIX || radix > Character.MAX_RADIX) {
+            return toString();
+        }
+        BigIntegerBytesList radixBigInteger = new BigIntegerBytesList(String.valueOf(radix));
+        BigIntegerBytesList quotient = (BigIntegerBytesList) this.clone();
+        StringBuilder resultString = new StringBuilder();
+        while (quotient.abs().compareTo(ZERO) != 0) {
+            BigIntegerBytesList[] tmp = quotient.divideAndRemainder(radixBigInteger);
+            quotient = tmp[0];
+            String remainder = getNumbersOrLetters(tmp[1].abs().intValue());
+            resultString.insert(0, remainder);
+        }
+        if (quotient.negative) {
+            resultString.insert(0, "-");
+        }
+        return resultString.toString();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        boolean FirstDigitIsNotZero = digits.get(0).getDigit() != 0;
+        sb.append((negative && FirstDigitIsNotZero) ? "-" : "");
+        for (Digit digit : digits) {
+            sb.append(digit.getDigit());
+        }
+        return sb.toString();
     }
 
     @Override

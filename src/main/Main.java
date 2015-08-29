@@ -15,17 +15,22 @@ import static org.junit.Assert.assertEquals;
 public class Main {
 
     public static void main(String args[]) {
-        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("165156322");
-        java.math.BigInteger bigOriginal2 = new java.math.BigInteger("-875287965485");
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("923132213563");
+        System.out.println(bigOriginal1.shiftRight(5).toString(2));
+//        BigIntegerBytesList big = new math.BigIntegerBytesList("-001111000000000001111111111110011110000000000011111111111100111100000000000111111111111001111000000000001111111111110011110000000000011111111111100", 2);
+//        System.out.println(bigOriginal1.toString());
+//        System.out.println(big.toString());
+        
+//        java.math.BigInteger bigOriginal2 = new java.math.BigInteger("-875287965485");
 //        System.out.println(Arrays.toString(bigOriginal1.toByteArray()));
         
-        System.out.println(bigOriginal1.clearBit(2453645));
-        AbstractBigInteger big1 = new math.BigIntegerBytesList("165156322");
+        System.out.println(bigOriginal1.shiftRight(5));
+        AbstractBigInteger big1 = new math.BigIntegerBytesList("923132213563");
         
         
-        AbstractBigInteger big2 = new math.BigIntegerBytesList("-875287965485");
+//        AbstractBigInteger big2 = new math.BigIntegerBytesList("-875287965485");
 //        System.out.println(Arrays.toString(big1.toByteArray()));
-        System.out.println(big1.clearBit(2453645));
+        System.out.println(big1.shiftRight(5));
 //        AbstractBigInteger big2 = new math.BigIntegerBytesList(new byte[]{-4, 10, 125, -45});
 
 //        BigInteger big = new BigInteger("-1115648995623");
