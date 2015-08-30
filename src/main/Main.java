@@ -15,10 +15,10 @@ import static org.junit.Assert.assertEquals;
 public class Main {
 
     public static void main(String args[]) {
-        System.out.println(Math.abs(Integer.MIN_VALUE + 1));
+//        System.out.println(Integer.toBinaryString(-5));
         
-        java.math.BigInteger bigOriginal1 = new java.math.BigInteger(-1, new byte[]{3, -128});
-        System.out.println(bigOriginal1.toString());
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("-1561655");
+        System.out.println(bigOriginal1.clearBit(5));
         
 //        BigIntegerBytesList big = new math.BigIntegerBytesList("-001111000000000001111111111110011110000000000011111111111100111100000000000111111111111001111000000000001111111111110011110000000000011111111111100", 2);
 //        System.out.println(bigOriginal1.toString());
@@ -28,8 +28,8 @@ public class Main {
 //        System.out.println(Arrays.toString(bigOriginal1.toByteArray()));
         
         
-//        AbstractBigInteger big1 = new math.BigIntegerBytesList("923132213563");
-//        System.out.println(big1.toString(2));
+        AbstractBigInteger big1 = new math.BigIntegerBytesList("-1561655");
+        System.out.println(big1.clearBit(5));
         
 //        AbstractBigInteger big2 = new math.BigIntegerBytesList("-875287965485");
 //        System.out.println(Arrays.toString(big1.toByteArray()));

@@ -59,24 +59,44 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         }
     }
 
+    private String getBinary(byte[] val) {
+        StringBuilder resString = new StringBuilder();
+        for (int i = 0; i < val.length; i++) {
+            String v = Integer.toBinaryString(val[i]);
+            // Substring for negatives.
+            v = v.substring(Math.max(v.length() - 8, 0));
+            // v.length() <= 8
+            while (v.length() < 8) {
+                v = "0" + v;
+            }
+            resString.append(v);
+        }
+        String complement = complement(resString.toString());
+        return complement;
+    }
+    
+    private String getBinary2(byte[] val) {
+        StringBuilder resString = new StringBuilder();
+        for (int i = 0; i < val.length; i++) {
+            String v = Integer.toBinaryString(val[i]);
+            // Substring for negatives.
+            v = v.substring(Math.max(v.length() - 8, 0));
+            // v.length() <= 8
+            while (v.length() < 8) {
+                v = "0" + v;
+            }
+            resString.append(v);
+        }
+        return resString.toString();
+    }
+
     public BigIntegerBytesList(byte[] val) {
         // Convert to String.
         // Subtract bit to bit. C2 = 2^n - N => N = 2^n - C2.
         byte res[] = new byte[val.length];
         if (val[0] < 0) {
             // Negative.
-            StringBuilder resString = new StringBuilder();
-            for (int i = 0; i < val.length; i++) {
-                String v = Integer.toBinaryString(val[i]);
-                // Substring for negatives.
-                v = v.substring(Math.max(v.length() - 8, 0));
-                // v.length() <= 8
-                while (v.length() < 8) {
-                    v = "0" + v;
-                }
-                resString.append(v);
-            }
-            String complement = complement(resString.toString());
+            String complement = getBinary(val);
             for (int i = 0, j = 0; i < complement.length(); i += 8, j++) {
                 String part = complement.substring(i, i + 8);
                 // Byte.parseByte no se puede utilizar porque solo puede hasta 7 bits.
@@ -106,13 +126,27 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     }
 
     public BigIntegerBytesList(int signum, byte[] magnitude) {
-        BigIntegerBytesList result = ZERO;
-        
-        for (int i = magnitude.length - 1; i >= 0; i++) {
-            int b = Math.abs(magnitude[i]);
-            BigIntegerBytesList mult = new BigIntegerBytesList("0");
-            result.add(new BigIntegerBytesList(String.valueOf(b)));
+        if(signum == 0 && magnitude.length > 0){
+            throw new NumberFormatException("signum-magnitude mismatch");
         }
+        String binary = getBinary2(magnitude);
+        if (signum == -1) {
+            negative = true;
+        }
+        BigIntegerBytesList bigRadix = new BigIntegerBytesList("2");
+        BigIntegerBytesList mult = ONE;
+        BigIntegerBytesList big = ZERO;
+        for (int i = binary.length() - 1; i >= 0; i--) {
+            String dig = String.valueOf(binary.charAt(i));
+            BigIntegerBytesList bigDig = new BigIntegerBytesList(dig);
+            if (bigDig.compareTo(bigRadix) < 0) {
+                big = big.add(mult.multiply(bigDig));
+                mult = mult.add(mult);
+            } else {
+                throw new NumberFormatException("Error en el formato del número: " + binary);
+            }
+        }
+        this.digits = big.digits;
     }
 
     public BigIntegerBytesList(int bitLength, int certainty, Random rnd) {
@@ -264,25 +298,19 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return toString(2).length();
     }
 
+    /**
+     * Return a BigInteger whose value is equivalent to this BigInteger with
+     * the designated bit cleared. (Computes (this & ~(1<<n)).)
+     * @param n index of bit to clear
+     * @return this & ~(1<<n)
+     */
     @Override
     public BigIntegerBytesList clearBit(int n) {
-        byte[] big = toByteArray();
-        int posInByte = n % 8;
-        byte mask = (byte) 255;
-        int i = 0, p = 1;
-        while (i < posInByte) {
-            i++;
-            p *= 2;
+        if(n < 0){
+            throw new ArithmeticException("Negative bit address");
         }
-        mask &= p;
-        mask = (byte) ~mask;
-        int posInNumber = n / 8;
-        if (posInNumber < big.length) {
-            big[n / 8] &= mask;
-        }
-
-        BigIntegerBytesList res = new BigIntegerBytesList(big);
-        return res;
+        BigIntegerBytesList mask2 = ONE.shiftLeft(n).not();
+        return and(mask2);
     }
 
     @Override
@@ -821,14 +849,14 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public BigIntegerBytesList pow(int exponent) {
-        if(exponent < 0){
+        if (exponent < 0) {
             throw new ArithmeticException("Exponent is negative");
         }
-        if(exponent == 0){
+        if (exponent == 0) {
             return ONE;
         }
         BigIntegerBytesList res = (BigIntegerBytesList) this.clone();
-        for (int i = 0; i < exponent-1; i++) {
+        for (int i = 0; i < exponent - 1; i++) {
             res = res.multiply(this);
         }
         return res;
@@ -836,7 +864,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public BigIntegerBytesList remainder(BigIntegerBytesList val) {
-        if(ZERO.equals(val)){
+        if (ZERO.equals(val)) {
             throw new ArithmeticException("Val is zero");
         }
         BigIntegerBytesList res = divideAndRemainder(val)[1];
