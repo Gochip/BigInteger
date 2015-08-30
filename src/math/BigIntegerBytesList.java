@@ -74,7 +74,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         String complement = complement(resString.toString());
         return complement;
     }
-    
+
     private String getBinary2(byte[] val) {
         StringBuilder resString = new StringBuilder();
         for (int i = 0; i < val.length; i++) {
@@ -126,7 +126,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     }
 
     public BigIntegerBytesList(int signum, byte[] magnitude) {
-        if(signum == 0 && magnitude.length > 0){
+        if (signum == 0 && magnitude.length > 0) {
             throw new NumberFormatException("signum-magnitude mismatch");
         }
         String binary = getBinary2(magnitude);
@@ -154,7 +154,27 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     }
 
     public BigIntegerBytesList(int numBits, Random rnd) {
+        this(1, getRandomBytes(numBits, rnd));
+    }
 
+    private static byte[] getRandomBytes(int numBits, Random rnd) {
+        if (numBits < 0) {
+            throw new IllegalArgumentException("numBits must be non-negative");
+        }
+        if (numBits == 0) {
+            return new byte[]{0};
+        }
+        byte[] bytes = new byte[(int) (Math.ceil((double) numBits / 8.0))];
+        rnd.nextBytes(bytes);
+        int tmp = numBits % 8;
+        int mask;
+        if (tmp == 0) {
+            mask = (int) 0xff;
+        } else {
+            mask = (int) (Math.pow(2, tmp) - 1);
+        }
+        bytes[0] &= mask;
+        return bytes;
     }
 
     public BigIntegerBytesList(String val, int radix) {
@@ -299,14 +319,15 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     }
 
     /**
-     * Return a BigInteger whose value is equivalent to this BigInteger with
-     * the designated bit cleared. (Computes (this & ~(1<<n)).)
+     * Return a BigInteger whose value is equivalent to this BigInteger with the
+     * designated bit cleared. (Computes (this & ~(1<<n)).)
+     *
      * @param n index of bit to clear
      * @return this & ~(1<<n)
      */
     @Override
     public BigIntegerBytesList clearBit(int n) {
-        if(n < 0){
+        if (n < 0) {
             throw new ArithmeticException("Negative bit address");
         }
         BigIntegerBytesList mask2 = ONE.shiftLeft(n).not();
@@ -444,32 +465,30 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         }
         return res;
     }
-    
+
     @Override
     public BigIntegerBytesList gcd(BigIntegerBytesList val) {
-        
-        
-        
-        if(val.equals(ZERO)){
+
+        if (val.equals(ZERO)) {
             return this;
         }
-        if(this.equals(ZERO)){
+        if (this.equals(ZERO)) {
             return val;
         }
-        
+
         BigIntegerBytesList a = this;
         BigIntegerBytesList b = val;
-        if(a.compareTo(b)>0){
+        if (a.compareTo(b) > 0) {
             BigIntegerBytesList aux = b;
             b = a;
             a = aux;
         }
-        while(!b.equals(ZERO)){
+        while (!b.equals(ZERO)) {
             BigIntegerBytesList r = a.mod(b);
             a = b;
             b = r;
         }
-        
+
         return a;
     }
 
@@ -714,28 +733,36 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public boolean isProbablePrime(int certainty) {
-        for (int i = 0; i < certainty; i++) {
-            BigIntegerBytesList a = new BigIntegerBytesList(this.bitLength(), new Random());
-            BigIntegerBytesList n1 = this.subtract(ONE);
-            BigIntegerBytesList r = null;
-            if (this.mod(TWO).compareTo(ZERO) == 0) {
-                // If its even.
-                BigIntegerBytesList tmp = n1.divide(TWO);
-                r = a.pow(tmp.intValue()).mod(this);
-            } else {
-                BigIntegerBytesList tmp = n1.divide(TWO);
-                r = a.pow(tmp.intValue()).mod(this);
-            }
-            if (r.compareTo(ONE) != 0 && (r.compareTo(n1) != 0)) {
-                return true;
-            }
-            BigIntegerBytesList s = a.divide(this);
-            BigIntegerBytesList diff = r.subtract(s);
-            if (this.mod(diff).compareTo(ZERO) == 0) {
-                return true;
+        BigIntegerBytesList thisMinusOne = this.subtract(ONE);
+        int[] primo = {2,3,5,7,11,13,17,19};
+        int s = 0;
+        boolean esPrimo = true;
+        BigIntegerBytesList a, r, y;
+        int j;
+        while(thisMinusOne.remainder(TWO).compareTo(ZERO) == 0){
+            thisMinusOne = thisMinusOne.divide(TWO);
+            s = s + 1;
+        }
+        r = thisMinusOne;
+        thisMinusOne = this.subtract(ONE);
+        for (int i = 0; i <= 7; i++) {
+            a = new BigIntegerBytesList(String.valueOf(primo[i]));
+            y = a.modPow(r, this);
+            if(y.compareTo(ONE) != 0 && y.compareTo(thisMinusOne) != 0){
+                j = 1;
+                while(j <= s - 1 && y.compareTo(thisMinusOne) != 0){
+                    y = y.modPow(TWO, this);
+                    if(y.compareTo(ONE) == 0){
+                        esPrimo = false;
+                    }
+                    j++;
+                }
+                if(y.compareTo(thisMinusOne) != 0){
+                    esPrimo = false;
+                }
             }
         }
-        return false;
+        return esPrimo;
     }
 
     @Override
@@ -750,12 +777,12 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public BigIntegerBytesList mod(BigIntegerBytesList val) {
-        if(val.signum() <= 0){
+        if (val.signum() <= 0) {
             throw new ArithmeticException("Val is negative or equals to zero");
         }
-        BigIntegerBytesList res = divideAndRemainder(val)[1];      
+        BigIntegerBytesList res = divideAndRemainder(val)[1];
         //http://stackoverflow.com/questions/4403542/how-does-java-do-modulus-calculations-with-negative-numbers
-        if(res.negative){
+        if (res.negative) {
             res = res.add(val);
         }
         return res;
@@ -905,9 +932,8 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         if (this.negative) {
             sig = -1;
         } /*else if (this.digits.get(0).getDigit() == 0) {
-            sig = 0;
-        }*/
-        else if(this.equals(ZERO)){
+         sig = 0;
+         }*/ else if (this.equals(ZERO)) {
             sig = 0;
         }
         return sig;
