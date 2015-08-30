@@ -106,7 +106,13 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     }
 
     public BigIntegerBytesList(int signum, byte[] magnitude) {
-
+        BigIntegerBytesList result = ZERO;
+        
+        for (int i = magnitude.length - 1; i >= 0; i++) {
+            int b = Math.abs(magnitude[i]);
+            BigIntegerBytesList mult = new BigIntegerBytesList("0");
+            result.add(new BigIntegerBytesList(String.valueOf(b)));
+        }
     }
 
     public BigIntegerBytesList(int bitLength, int certainty, Random rnd) {
