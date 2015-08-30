@@ -416,10 +416,54 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         }
         return res;
     }
-
+ /*
+    public GCD(int a, int b) {
+        
+        if (a > b) {
+          int  temp = b;
+            b = a;
+            a = temp;
+        }
+        result = GCD(a, b);
+    }
+        
+    private int GCD(int a, int b) {
+        
+        while (b != 0) {
+            int r = a % b;
+            a = b;
+            b = r;
+        }
+        return a;
+    }
+    */
+    
     @Override
     public BigIntegerBytesList gcd(BigIntegerBytesList val) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        
+        
+        if(val.equals(ZERO)){
+            return this;
+        }
+        if(this.equals(ZERO)){
+            return val;
+        }
+        
+        BigIntegerBytesList a = this;
+        BigIntegerBytesList b = val;
+        if(a.compareTo(b)>0){
+            BigIntegerBytesList aux = b;
+            b = a;
+            a = aux;
+        }
+        while(!b.equals(ZERO)){
+            BigIntegerBytesList r = a.mod(b);
+            a = b;
+            b = r;
+        }
+        
+        return a;
     }
 
     @Override
@@ -699,7 +743,15 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public BigIntegerBytesList mod(BigIntegerBytesList val) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(val.signum() <= 0){
+            throw new ArithmeticException("Val is negative or equals to zero");
+        }
+        BigIntegerBytesList res = divideAndRemainder(val)[1];      
+        //http://stackoverflow.com/questions/4403542/how-does-java-do-modulus-calculations-with-negative-numbers
+        if(res.negative){
+            res = res.add(val);
+        }
+        return res;
     }
 
     @Override
@@ -845,7 +897,10 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         int sig = 1;
         if (this.negative) {
             sig = -1;
-        } else if (this.digits.get(0).getDigit() == 0) {
+        } /*else if (this.digits.get(0).getDigit() == 0) {
+            sig = 0;
+        }*/
+        else if(this.equals(ZERO)){
             sig = 0;
         }
         return sig;

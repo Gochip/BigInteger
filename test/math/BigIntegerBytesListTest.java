@@ -1264,6 +1264,10 @@ public class BigIntegerBytesListTest {
         java.math.BigInteger bigOriginal3 = new java.math.BigInteger("-0000");
         AbstractBigInteger big3 = createNumber("-0000");
         assertEquals(bigOriginal3.signum(),big3.signum());
+        
+        java.math.BigInteger bigOriginal4 = new java.math.BigInteger("-00001");
+        AbstractBigInteger big4 = createNumber("-00001");
+        assertEquals(bigOriginal4.signum(),big4.signum());
     }
     
     //Test pow()
@@ -1303,7 +1307,77 @@ public class BigIntegerBytesListTest {
         java.math.BigInteger bigO2 = new BigInteger("589");
         AbstractBigInteger big2 = createNumber("589");
         assertEquals(bigO2.remainder(new BigInteger("5698")).toString(), big2.remainder(createNumber("5698")).toString());
-        
+
+        java.math.BigInteger bigO3 = new BigInteger("856882");
+        AbstractBigInteger big3 = createNumber("856882");
+        assertEquals(bigO3.remainder(new BigInteger("-15")).toString(), big3.remainder(createNumber("-15")).toString());
+
     }
     
+    public void testRemainderArithmeticException(){
+        exception.expect(ArithmeticException.class);
+        AbstractBigInteger big = createNumber("12832340");
+        big.remainder(createNumber("0"));
+    }
+    
+    //Test mod
+    @Test
+    public void testMod(){
+        java.math.BigInteger bigO = new BigInteger("15478962");
+        AbstractBigInteger big = createNumber("15478962");
+        assertEquals(bigO.mod(new BigInteger("456")).toString(),big.mod(createNumber("456")).toString());
+        
+        java.math.BigInteger bigO1 = new BigInteger("5489");
+        AbstractBigInteger big1 = createNumber("5489");
+        assertEquals(bigO1.mod(new BigInteger("7852")).toString(),big1.mod(createNumber("7852")).toString());
+        
+        java.math.BigInteger bigO2 = new BigInteger("-785215");
+        AbstractBigInteger big2 = createNumber("-785215");
+        assertEquals(bigO2.mod(new BigInteger("589")).toString(),big2.mod(createNumber("589")).toString());
+        
+        java.math.BigInteger bigO3 = new BigInteger("658712345");
+        AbstractBigInteger big3 = createNumber("658712345");
+        assertEquals(bigO3.mod(new BigInteger("658712345")).toString(),big3.mod(createNumber("658712345")).toString());
+    }
+    
+    @Test
+    public void testModArithmeticException(){
+        exception.expect(ArithmeticException.class);
+        
+        java.math.BigInteger bigO = new BigInteger("15478");
+        AbstractBigInteger big = createNumber("15478");
+        assertEquals(bigO.mod(new BigInteger("0")).toString(),big.mod(createNumber("0")).toString());
+        
+        java.math.BigInteger bigO1 = new BigInteger("15478");
+        AbstractBigInteger big1 = createNumber("15478");
+        assertEquals(bigO1.mod(new BigInteger("-10")).toString(),big1.mod(createNumber("-10")).toString());
+    }
+    
+    //Test gcd
+    public void testGcd(){
+        java.math.BigInteger bigO = new BigInteger("5869854");
+        AbstractBigInteger big = createNumber("5869854");
+        assertEquals(bigO.gcd(new BigInteger("4589")).toString(), big.gcd(createNumber("4589")).toString());
+        
+        java.math.BigInteger bigO1 = new BigInteger("48");
+        AbstractBigInteger big1 = createNumber("48");
+        assertEquals(bigO1.gcd(new BigInteger("60")).toString(), big1.gcd(createNumber("60")).toString());
+        
+        java.math.BigInteger bigO2 = new BigInteger("60");
+        AbstractBigInteger big2 = createNumber("60");
+        assertEquals(bigO2.gcd(new BigInteger("48")).toString(), big2.gcd(createNumber("48")).toString());
+        
+        java.math.BigInteger bigO3 = new BigInteger("589621");
+        AbstractBigInteger big3 = createNumber("589621");
+        assertEquals(bigO3.gcd(new BigInteger("0")).toString(), big3.gcd(createNumber("0")).toString());
+        
+        java.math.BigInteger bigO4 = new BigInteger("0");
+        AbstractBigInteger big4 = createNumber("0");
+        assertEquals(bigO4.gcd(new BigInteger("589962")).toString(), big4.gcd(createNumber("589962")).toString());
+        
+        java.math.BigInteger bigO5 = new BigInteger("0");
+        AbstractBigInteger big5 = createNumber("0");
+        assertEquals(bigO5.gcd(new BigInteger("0")).toString(), big5.gcd(createNumber("0")).toString());
+        
+    }
 }
