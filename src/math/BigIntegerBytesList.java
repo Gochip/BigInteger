@@ -298,25 +298,19 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return toString(2).length();
     }
 
+    /**
+     * Return a BigInteger whose value is equivalent to this BigInteger with
+     * the designated bit cleared. (Computes (this & ~(1<<n)).)
+     * @param n index of bit to clear
+     * @return this & ~(1<<n)
+     */
     @Override
     public BigIntegerBytesList clearBit(int n) {
-        byte[] big = toByteArray();
-        int posInByte = n % 8;
-        byte mask = (byte) 255;
-        int i = 0, p = 1;
-        while (i < posInByte) {
-            i++;
-            p *= 2;
+        if(n < 0){
+            throw new ArithmeticException("Negative bit address");
         }
-        mask &= p;
-        mask = (byte) ~mask;
-        int posInNumber = n / 8;
-        if (posInNumber < big.length) {
-            big[n / 8] &= mask;
-        }
-
-        BigIntegerBytesList res = new BigIntegerBytesList(big);
-        return res;
+        BigIntegerBytesList mask2 = ONE.shiftLeft(n).not();
+        return and(mask2);
     }
 
     @Override
