@@ -10,6 +10,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
+import sun.security.krb5.JavaxSecurityAuthKerberosAccess;
 
 /**
  *
@@ -1288,5 +1289,21 @@ public class BigIntegerBytesListTest {
         big2.pow(-2);
     }
     
+    //Test remainder
+    @Test
+    public void testRemainder(){
+        java.math.BigInteger bigO = new BigInteger("15956215");
+        AbstractBigInteger big = createNumber("15956215");
+        assertEquals(bigO.remainder(new BigInteger("5")).toString(), big.remainder(createNumber("5")).toString());
+        
+        java.math.BigInteger bigO1 = new BigInteger("5968548");
+        AbstractBigInteger big1 = createNumber("5968548");
+        assertEquals(bigO1.remainder(new BigInteger("485")).toString(), big1.remainder(createNumber("485")).toString());
+        
+        java.math.BigInteger bigO2 = new BigInteger("589");
+        AbstractBigInteger big2 = createNumber("589");
+        assertEquals(bigO2.remainder(new BigInteger("5698")).toString(), big2.remainder(createNumber("5698")).toString());
+        
+    }
     
 }

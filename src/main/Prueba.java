@@ -16,10 +16,6 @@ import static org.junit.Assert.assertEquals;
  */
 public class Prueba {
     public static void main(String args[]){
-//        BigIntegerBytesList big = new BigIntegerBytesList("25686545");
-//        System.out.println(big.pow(225).toString());
-        java.math.BigInteger bigO = new BigInteger("5000");
-       BigIntegerBytesList big = new BigIntegerBytesList("5000");
-        System.out.println(bigO.pow(100)+" "+big.pow(100));
+
     }
 }
