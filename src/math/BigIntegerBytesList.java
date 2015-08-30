@@ -444,27 +444,6 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         }
         return res;
     }
- /*
-    public GCD(int a, int b) {
-        
-        if (a > b) {
-          int  temp = b;
-            b = a;
-            a = temp;
-        }
-        result = GCD(a, b);
-    }
-        
-    private int GCD(int a, int b) {
-        
-        while (b != 0) {
-            int r = a % b;
-            a = b;
-            b = r;
-        }
-        return a;
-    }
-    */
     
     @Override
     public BigIntegerBytesList gcd(BigIntegerBytesList val) {
