@@ -909,7 +909,11 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
            }else if(j >= 0){
                newBinary.append(binary.charAt(j));
            }else{
-               newBinary.append('0');
+               if(this.negative){
+                   newBinary.append('1');
+               }else{
+                   newBinary.append('0');
+               }
            }
         }
         newBinary = newBinary.reverse();
