@@ -789,8 +789,21 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     }
 
     @Override
-    public BigIntegerBytesList modInverse(BigIntegerBytesList val) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public BigIntegerBytesList modInverse(BigIntegerBytesList m) {
+        if(m.compareTo(ZERO) <= 0){
+            throw new ArithmeticException("BigInteger: modulus not positive");
+        }
+        if(gcd(m).compareTo(ONE) != 0){
+            throw new ArithmeticException("BigInteger not invertible");
+        }
+        BigIntegerBytesList i = ONE;
+        for(; i.compareTo(m) < 0; i = i.add(ONE)){
+            if(this.multiply(i).mod(m).compareTo(ONE) == 0){
+                return i;
+            }
+        }
+        // never it should run this
+        return null;
     }
 
     @Override
