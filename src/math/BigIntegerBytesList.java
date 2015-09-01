@@ -877,9 +877,37 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return res;
     }
 
+    
     @Override
     public BigIntegerBytesList setBit(int n) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(n < 0){
+            throw new ArithmeticException("n is invalid");
+        }
+        String binary;
+        if(this.negative){
+            binary = complement(this.toString(2).substring(1));
+        }else{
+            binary = this.toString(2);
+        }
+        StringBuilder newBinary = new StringBuilder();
+        for(int i = 0, j = (binary.length() - 1); i <= n || j >= 0; i++,j--){
+           if(i==n){
+               newBinary.append('1');
+           }else if(j >= 0){
+               newBinary.append(binary.charAt(j));
+           }else{
+               newBinary.append('0');
+           }
+        }
+        newBinary = newBinary.reverse();
+        BigIntegerBytesList result;
+        if(this.negative){
+            result = new BigIntegerBytesList(complement(newBinary.toString()),2);
+            result.negative = true;
+        }else{
+            result = new BigIntegerBytesList(newBinary.toString(),2);
+        }
+        return result;
     }
 
     @Override

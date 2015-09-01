@@ -1380,4 +1380,34 @@ public class BigIntegerBytesListTest {
         assertEquals(bigO5.gcd(new BigInteger("0")).toString(), big5.gcd(createNumber("0")).toString());
         
     }
+    
+    //Test setBit()
+    @Test
+    public void testSetBit(){
+        java.math.BigInteger bigO = new BigInteger("58796564");
+        AbstractBigInteger big = createNumber("58796564");
+        assertEquals(bigO.setBit(7).toString(),big.setBit(7).toString());
+
+        java.math.BigInteger bigO1 = new BigInteger("3564542");
+        AbstractBigInteger big1 = createNumber("3564542");
+        assertEquals(bigO1.setBit(3).toString(),big1.setBit(3).toString());
+        
+        java.math.BigInteger bigO2 = new BigInteger("4567");
+        AbstractBigInteger big2 = createNumber("4567");
+        assertEquals(bigO2.setBit(19).toString(),big2.setBit(19).toString());
+        
+        java.math.BigInteger bigO3 = new BigInteger("2452453");
+        AbstractBigInteger big3 = createNumber("2452453");
+        assertEquals(bigO3.setBit(0).toString(),big3.setBit(0).toString());
+
+        java.math.BigInteger bigO4 = new BigInteger("-58796564");
+        AbstractBigInteger big4 = createNumber("-58796564");
+        assertEquals(bigO4.setBit(3).toString(),big4.setBit(3).toString());
+        
+        java.math.BigInteger bigO5 = new BigInteger("-587");
+        AbstractBigInteger big5 = createNumber("-587");
+        assertEquals(bigO5.setBit(12).toString(),big5.setBit(12).toString());
+    }
+    
+    
 }
