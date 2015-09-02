@@ -734,12 +734,12 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     @Override
     public boolean isProbablePrime(int certainty) {
         BigIntegerBytesList thisMinusOne = this.subtract(ONE);
-        int[] primo = {2,3,5,7,11,13,17,19};
+        int[] primo = {2, 3, 5, 7, 11, 13, 17, 19};
         int s = 0;
         boolean esPrimo = true;
         BigIntegerBytesList a, r, y;
         int j;
-        while(thisMinusOne.remainder(TWO).compareTo(ZERO) == 0){
+        while (thisMinusOne.remainder(TWO).compareTo(ZERO) == 0) {
             thisMinusOne = thisMinusOne.divide(TWO);
             s = s + 1;
         }
@@ -748,16 +748,16 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         for (int i = 0; i <= 7; i++) {
             a = new BigIntegerBytesList(String.valueOf(primo[i]));
             y = a.modPow(r, this);
-            if(y.compareTo(ONE) != 0 && y.compareTo(thisMinusOne) != 0){
+            if (y.compareTo(ONE) != 0 && y.compareTo(thisMinusOne) != 0) {
                 j = 1;
-                while(j <= s - 1 && y.compareTo(thisMinusOne) != 0){
+                while (j <= s - 1 && y.compareTo(thisMinusOne) != 0) {
                     y = y.modPow(TWO, this);
-                    if(y.compareTo(ONE) == 0){
+                    if (y.compareTo(ONE) == 0) {
                         esPrimo = false;
                     }
                     j++;
                 }
-                if(y.compareTo(thisMinusOne) != 0){
+                if (y.compareTo(thisMinusOne) != 0) {
                     esPrimo = false;
                 }
             }
@@ -790,15 +790,15 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public BigIntegerBytesList modInverse(BigIntegerBytesList m) {
-        if(m.compareTo(ZERO) <= 0){
+        if (m.compareTo(ZERO) <= 0) {
             throw new ArithmeticException("BigInteger: modulus not positive");
         }
-        if(gcd(m).compareTo(ONE) != 0){
+        if (gcd(m).compareTo(ONE) != 0) {
             throw new ArithmeticException("BigInteger not invertible");
         }
         BigIntegerBytesList i = ONE;
-        for(; i.compareTo(m) < 0; i = i.add(ONE)){
-            if(this.multiply(i).mod(m).compareTo(ONE) == 0){
+        for (; i.compareTo(m) < 0; i = i.add(ONE)) {
+            if (this.multiply(i).mod(m).compareTo(ONE) == 0) {
                 return i;
             }
         }
@@ -808,7 +808,23 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public BigIntegerBytesList modPow(BigIntegerBytesList exponent, BigIntegerBytesList m) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(m.compareTo(ZERO) <= 0){
+            throw new ArithmeticException("BigInteger: modulus not positive");
+        }
+        if (mod(m).compareTo(ZERO) == 0) {
+            return (BigIntegerBytesList) ZERO.clone();
+        } else if (gcd(m).compareTo(ONE) == 0) {
+            // Relative prime
+            //BigIntegerBytesList t = exponent.mod(m.subtract(ONE));
+            //exponent = (BigIntegerBytesList) t.clone();
+        }
+        BigIntegerBytesList i = ONE;
+        BigIntegerBytesList a = (BigIntegerBytesList) this.clone();
+        BigIntegerBytesList r = (BigIntegerBytesList) a.clone();
+        for (; i.compareTo(exponent) < 0; i = i.add(ONE)) {
+            r = (r.multiply(a).remainder(m));
+        }
+        return r;
     }
 
     @Override
@@ -890,39 +906,38 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return res;
     }
 
-    
     @Override
     public BigIntegerBytesList setBit(int n) {
-        if(n < 0){
+        if (n < 0) {
             throw new ArithmeticException("n is invalid");
         }
         String binary;
-        if(this.negative){
+        if (this.negative) {
             binary = complement(this.toString(2).substring(1));
-        }else{
+        } else {
             binary = this.toString(2);
         }
         StringBuilder newBinary = new StringBuilder();
-        for(int i = 0, j = (binary.length() - 1); i <= n || j >= 0; i++,j--){
-           if(i==n){
-               newBinary.append('1');
-           }else if(j >= 0){
-               newBinary.append(binary.charAt(j));
-           }else{
-               if(this.negative){
-                   newBinary.append('1');
-               }else{
-                   newBinary.append('0');
-               }
-           }
+        for (int i = 0, j = (binary.length() - 1); i <= n || j >= 0; i++, j--) {
+            if (i == n) {
+                newBinary.append('1');
+            } else if (j >= 0) {
+                newBinary.append(binary.charAt(j));
+            } else {
+                if (this.negative) {
+                    newBinary.append('1');
+                } else {
+                    newBinary.append('0');
+                }
+            }
         }
         newBinary = newBinary.reverse();
         BigIntegerBytesList result;
-        if(this.negative){
-            result = new BigIntegerBytesList(complement(newBinary.toString()),2);
+        if (this.negative) {
+            result = new BigIntegerBytesList(complement(newBinary.toString()), 2);
             result.negative = true;
-        }else{
-            result = new BigIntegerBytesList(newBinary.toString(),2);
+        } else {
+            result = new BigIntegerBytesList(newBinary.toString(), 2);
         }
         return result;
     }

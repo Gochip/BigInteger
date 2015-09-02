@@ -17,21 +17,20 @@ public class Main {
 
     public static void main(String args[]) {
 //        System.out.println(Integer.toBinaryString(-5));
-        
-        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("25");
-        System.out.println(bigOriginal1.modInverse(new java.math.BigInteger("97")));
-        
+
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("445");
+        System.out.println(bigOriginal1.modPow(new java.math.BigInteger("100"), new java.math.BigInteger("7")));
+
 //        BigIntegerBytesList big = new math.BigIntegerBytesList("-001111000000000001111111111110011110000000000011111111111100111100000000000111111111111001111000000000001111111111110011110000000000011111111111100", 2);
 //        System.out.println(bigOriginal1.toString());
 //        System.out.println(big.toString());
         
 //        java.math.BigInteger bigOriginal2 = new java.math.BigInteger("-875287965485");
 //        System.out.println(Arrays.toString(bigOriginal1.toByteArray()));
-        
-        
-        AbstractBigInteger big1 = new math.BigIntegerBytesList("25");
-        System.out.println(big1.modInverse(new math.BigIntegerBytesList("97")));
-        
+
+        AbstractBigInteger big1 = new math.BigIntegerBytesList("445");
+        System.out.println(big1.modPow(new math.BigIntegerBytesList("100"), new math.BigIntegerBytesList("7")));
+
 //        AbstractBigInteger big2 = new math.BigIntegerBytesList("-875287965485");
 //        System.out.println(Arrays.toString(big1.toByteArray()));
 //        System.out.println(big1.shiftRight(5));
