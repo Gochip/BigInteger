@@ -1409,5 +1409,37 @@ public class BigIntegerBytesListTest {
         assertEquals(bigO5.setBit(12).toString(),big5.setBit(12).toString());
     }
     
+    // Test modPow()
+    @Test
+    public void testModPow(){
+        java.math.BigInteger bigBase = new BigInteger("58796564");
+        java.math.BigInteger bigExp = new BigInteger("587");
+        java.math.BigInteger bigMod = new BigInteger("350");
+        AbstractBigInteger bigBase2 = createNumber("58796564");
+        AbstractBigInteger bigExp2 = createNumber("587");
+        AbstractBigInteger bigMod2 = createNumber("350");
+        assertEquals(bigBase.modPow(bigExp, bigMod).toString(), bigBase2.modPow(bigExp2, bigMod2).toString());
+    }
     
+    @Test
+    public void testModPowNegativeExponent(){
+        java.math.BigInteger bigBase = new BigInteger("5871");
+        java.math.BigInteger bigExp = new BigInteger("-650");
+        java.math.BigInteger bigMod = new BigInteger("350");
+        AbstractBigInteger bigBase2 = createNumber("5871");
+        AbstractBigInteger bigExp2 = createNumber("-650");
+        AbstractBigInteger bigMod2 = createNumber("350");
+        assertEquals(bigBase.modPow(bigExp, bigMod).toString(), bigBase2.modPow(bigExp2, bigMod2).toString());
+    }
+    
+    @Test
+    public void testModPowNegatives(){
+        java.math.BigInteger bigBase = new BigInteger("-5871");
+        java.math.BigInteger bigExp = new BigInteger("-650");
+        java.math.BigInteger bigMod = new BigInteger("350");
+        AbstractBigInteger bigBase2 = createNumber("-5871");
+        AbstractBigInteger bigExp2 = createNumber("-650");
+        AbstractBigInteger bigMod2 = createNumber("350");
+        assertEquals(bigBase.modPow(bigExp, bigMod).toString(), bigBase2.modPow(bigExp2, bigMod2).toString());
+    }
 }

@@ -780,7 +780,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         if (val.signum() <= 0) {
             throw new ArithmeticException("Val is negative or equals to zero");
         }
-        BigIntegerBytesList res = divideAndRemainder(val)[1];
+        BigIntegerBytesList res = remainder(val);
         //http://stackoverflow.com/questions/4403542/how-does-java-do-modulus-calculations-with-negative-numbers
         if (res.negative) {
             res = res.add(val);
@@ -811,18 +811,25 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         if(m.compareTo(ZERO) <= 0){
             throw new ArithmeticException("BigInteger: modulus not positive");
         }
-        if (mod(m).compareTo(ZERO) == 0) {
+        boolean exponentNeg = exponent.negative;
+        if(exponentNeg && mod(m).compareTo(ZERO) == 0){
+            throw new ArithmeticException("BigInteger not invertible");
+        } else if (mod(m).compareTo(ZERO) == 0) {
             return (BigIntegerBytesList) ZERO.clone();
-        } else if (gcd(m).compareTo(ONE) == 0) {
+        } else if (gcd(m).compareTo(ONE) != 0) {
             // Relative prime
             //BigIntegerBytesList t = exponent.mod(m.subtract(ONE));
             //exponent = (BigIntegerBytesList) t.clone();
         }
+        exponent = exponent.abs();
         BigIntegerBytesList i = ONE;
-        BigIntegerBytesList a = (BigIntegerBytesList) this.clone();
+        BigIntegerBytesList a = this.mod(m);
         BigIntegerBytesList r = (BigIntegerBytesList) a.clone();
         for (; i.compareTo(exponent) < 0; i = i.add(ONE)) {
-            r = (r.multiply(a).remainder(m));
+            r = r.multiply(a).mod(m);
+        }
+        if(exponentNeg){
+            r = r.modInverse(m);
         }
         return r;
     }
