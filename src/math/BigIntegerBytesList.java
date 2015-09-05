@@ -208,7 +208,10 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     @Override
     public BigIntegerBytesList abs() {
         BigIntegerBytesList bigAbs = new BigIntegerBytesList("0");
-        bigAbs.digits = digits;
+        bigAbs.digits = new ArrayList<>();
+        for (int i = 0; i < digits.size(); i++) {
+            bigAbs.digits.add((Digit)digits.get(i).clone());
+        }
         return (negative) ? negate() : bigAbs;
     }
 
@@ -222,8 +225,8 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
             return subtract2(val);
         }
 
-        BigIntegerBytesList sumando1 = this;
-        BigIntegerBytesList sumando2 = val;
+        BigIntegerBytesList sumando1 = (BigIntegerBytesList)this.clone();
+        BigIntegerBytesList sumando2 = (BigIntegerBytesList)val.clone();
         int nm = sumando1.digits.size();
         int ns = sumando2.digits.size();
         int max = nm;
@@ -662,8 +665,8 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     }
 
     private BigIntegerBytesList subtract2(BigIntegerBytesList val) {
-        BigIntegerBytesList minuendo = this;
-        BigIntegerBytesList sustraendo = val;
+        BigIntegerBytesList minuendo = (BigIntegerBytesList)this.clone();
+        BigIntegerBytesList sustraendo = (BigIntegerBytesList)val.clone();
         StringBuilder stringResult = new StringBuilder();
 
         if (minuendo.negative && sustraendo.negative) {
@@ -1090,5 +1093,10 @@ class Digit {
 
     public void setDigit(byte digit) {
         this.digit = digit;
+    }
+    
+    @Override
+    protected Object clone() {
+        return new Digit(digit);
     }
 }
