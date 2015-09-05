@@ -38,6 +38,7 @@ public abstract class AbstractBigInteger<T extends AbstractBigInteger> extends N
     public abstract T shiftRight(int n);
     public abstract int signum();
     public abstract T subtract(T val);
+    public abstract boolean testBit(int n);
     public abstract byte[] toByteArray();
     public abstract String toString(int radix);
     public abstract T xor(T val);

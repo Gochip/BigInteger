@@ -1074,6 +1074,19 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return res;
     }
 
+    @Override
+    public boolean testBit(int n) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public static BigIntegerBytesList probablePrime(int bitLength, Random rnd){
+        return null;
+    }
+    
+    public static BigIntegerBytesList valueOf(long val){
+        return null;
+    }
+
 }
 
 /**
