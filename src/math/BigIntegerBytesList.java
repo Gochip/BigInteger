@@ -736,6 +736,9 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public boolean isProbablePrime(int certainty) {
+        if(this.compareTo(TWO) == 0 || this.compareTo(TWO.add(ONE)) == 0){
+            return true;
+        }
         BigIntegerBytesList thisMinusOne = this.subtract(ONE);
         int[] primo = {2, 3, 5, 7, 11, 13, 17, 19};
         int s = 0;
@@ -845,7 +848,17 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public BigIntegerBytesList nextProbablePrime() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(compareTo(ZERO) < 0){
+            throw new ArithmeticException("start < 0: -1");
+        }
+        if(compareTo(ONE) <= 0){
+            return (BigIntegerBytesList) TWO.clone();
+        }
+        BigIntegerBytesList i = this.add(ONE);
+        while(!i.isProbablePrime(100)){
+            i = i.add(TWO);
+        }
+        return i;
     }
 
     @Override
@@ -1084,7 +1097,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     }
     
     public static BigIntegerBytesList valueOf(long val){
-        return null;
+        return new BigIntegerBytesList(String.valueOf(val));
     }
 
 }
