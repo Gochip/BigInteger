@@ -18,8 +18,8 @@ public class Main {
     public static void main(String args[]) {
 //        System.out.println(Integer.toBinaryString(-5));
 
-        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("104729");
-        System.out.println(bigOriginal1.isProbablePrime(9));
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("446597846598465387946512894652139846512397846518974658986453896453");
+        System.out.println(bigOriginal1.nextProbablePrime());
 
         
 //        BigIntegerBytesList big = new math.BigIntegerBytesList("-001111000000000001111111111110011110000000000011111111111100111100000000000111111111111001111000000000001111111111110011110000000000011111111111100", 2);
@@ -29,8 +29,8 @@ public class Main {
 //        java.math.BigInteger bigOriginal2 = new java.math.BigInteger("-875287965485");
 //        System.out.println(Arrays.toString(bigOriginal1.toByteArray()));
 
-        AbstractBigInteger big1 = new math.BigIntegerBytesList("104729");
-        System.out.println(big1.isProbablePrime(9));
+        AbstractBigInteger big1 = new math.BigIntegerBytesList("254884");
+        System.out.println(big1.nextProbablePrime());
 
 //        AbstractBigInteger big2 = new math.BigIntegerBytesList("-875287965485");
 //        System.out.println(Arrays.toString(big1.toByteArray()));
