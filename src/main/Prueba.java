@@ -15,9 +15,9 @@ import math.BigIntegerBytesList;
  */
 public class Prueba {
     public static void main(String args[]){
-        BigIntegerBytesList big = new BigIntegerBytesList("-587");
-        BigInteger b  = new BigInteger("-587");
-        System.out.println(b.setBit(12)+" "+big.setBit(12));
+        BigIntegerBytesList big = new BigIntegerBytesList("101001",2);
+        BigInteger b  = new BigInteger("101001",2);
+        System.out.println(b.testBit(0)+" "+big.testBit(0));
         
     }
 }

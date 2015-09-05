@@ -47,6 +47,10 @@ public class BigIntegerBytesListTest {
     private AbstractBigInteger createNumber(byte[] b) {
         return new math.BigIntegerBytesList(b);
     }
+    
+     private AbstractBigInteger createNumber(String number,int radix) {
+        return new math.BigIntegerBytesList(number,radix);
+    }
 
     // TEST numberFormatException
     @Test
@@ -1441,5 +1445,29 @@ public class BigIntegerBytesListTest {
         AbstractBigInteger bigExp2 = createNumber("-650");
         AbstractBigInteger bigMod2 = createNumber("350");
         assertEquals(bigBase.modPow(bigExp, bigMod).toString(), bigBase2.modPow(bigExp2, bigMod2).toString());
+    }
+    
+    //Test
+    @Test
+    public void testTestBit(){
+        java.math.BigInteger bigO = new BigInteger("2548");
+        AbstractBigInteger big = createNumber("2548");
+        assertEquals(bigO.testBit(3),big.testBit(3));
+        
+        java.math.BigInteger bigO1 = new BigInteger("1001010001010",2);
+        AbstractBigInteger big1 = createNumber("1001010001010",2);
+        assertEquals(bigO1.testBit(15),big1.testBit(15));
+        
+        java.math.BigInteger bigO2 = new BigInteger("-856");
+        AbstractBigInteger big2 = createNumber("-856");
+        assertEquals(bigO2.testBit(4),big2.testBit(4));
+        
+        java.math.BigInteger bigO3 = new BigInteger("-89656225621");
+        AbstractBigInteger big3 = createNumber("-89656225621");
+        assertEquals(bigO3.testBit(7),big3.testBit(7));
+        
+        java.math.BigInteger bigO4 = new BigInteger("758962721365");
+        AbstractBigInteger big4 = createNumber("758962721365");
+        assertEquals(bigO4.testBit(12),big4.testBit(12));
     }
 }

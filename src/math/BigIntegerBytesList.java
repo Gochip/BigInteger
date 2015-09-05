@@ -150,7 +150,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     }
 
     public BigIntegerBytesList(int bitLength, int certainty, Random rnd) {
-
+        
     }
 
     public BigIntegerBytesList(int numBits, Random rnd) {
@@ -1076,7 +1076,11 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public boolean testBit(int n) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(n < 0){
+            throw new ArithmeticException("n is negative");
+        }
+        boolean result = ! this.and(ONE.shiftLeft(n)).equals(ZERO);
+        return result;
     }
     
     public static BigIntegerBytesList probablePrime(int bitLength, Random rnd){
