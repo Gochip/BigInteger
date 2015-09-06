@@ -150,7 +150,31 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     }
 
     public BigIntegerBytesList(int bitLength, int certainty, Random rnd) {
-        
+        this(getRandomPrime(bitLength, certainty, rnd).toString());
+    }
+
+    private static BigIntegerBytesList getRandomPrime(int bitLength, int certainty, Random rnd) {
+        BigIntegerBytesList from = TWO.pow(bitLength - 1).add(ONE);
+        BigIntegerBytesList until = TWO.pow(bitLength);
+        int r = (int) (rnd.nextDouble() * 100);
+        BigIntegerBytesList big = new BigIntegerBytesList(String.valueOf(r)).multiply(until).divide(new BigIntegerBytesList("100")).add(from);
+        BigIntegerBytesList i;
+        if (big.isProbablePrime(certainty)) {
+            return big;
+        } else {
+            if (big.mod(TWO).compareTo(ZERO) == 0) {
+                i = big.add(ONE);
+            } else {
+                i = big.add(TWO);
+            }
+            while (!i.isProbablePrime(certainty)) {
+                i = i.add(TWO);
+                if(i.compareTo(until) >= 0){
+                    i = from;
+                }
+            }
+        }
+        return i;
     }
 
     public BigIntegerBytesList(int numBits, Random rnd) {
@@ -210,7 +234,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         BigIntegerBytesList bigAbs = new BigIntegerBytesList("0");
         bigAbs.digits = new ArrayList<>();
         for (int i = 0; i < digits.size(); i++) {
-            bigAbs.digits.add((Digit)digits.get(i).clone());
+            bigAbs.digits.add((Digit) digits.get(i).clone());
         }
         return (negative) ? negate() : bigAbs;
     }
@@ -225,8 +249,8 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
             return subtract2(val);
         }
 
-        BigIntegerBytesList sumando1 = (BigIntegerBytesList)this.clone();
-        BigIntegerBytesList sumando2 = (BigIntegerBytesList)val.clone();
+        BigIntegerBytesList sumando1 = (BigIntegerBytesList) this.clone();
+        BigIntegerBytesList sumando2 = (BigIntegerBytesList) val.clone();
         int nm = sumando1.digits.size();
         int ns = sumando2.digits.size();
         int max = nm;
@@ -669,8 +693,8 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     }
 
     private BigIntegerBytesList subtract2(BigIntegerBytesList val) {
-        BigIntegerBytesList minuendo = (BigIntegerBytesList)this.clone();
-        BigIntegerBytesList sustraendo = (BigIntegerBytesList)val.clone();
+        BigIntegerBytesList minuendo = (BigIntegerBytesList) this.clone();
+        BigIntegerBytesList sustraendo = (BigIntegerBytesList) val.clone();
         StringBuilder stringResult = new StringBuilder();
 
         if (minuendo.negative && sustraendo.negative) {
@@ -749,7 +773,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public boolean isProbablePrime(int certainty) {
-        if(this.compareTo(TWO) == 0 || this.compareTo(TWO.add(ONE)) == 0){
+        if (this.compareTo(TWO) == 0 || this.compareTo(TWO.add(ONE)) == 0) {
             return true;
         }
         BigIntegerBytesList thisMinusOne = this.subtract(ONE);
@@ -827,11 +851,11 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public BigIntegerBytesList modPow(BigIntegerBytesList exponent, BigIntegerBytesList m) {
-        if(m.compareTo(ZERO) <= 0){
+        if (m.compareTo(ZERO) <= 0) {
             throw new ArithmeticException("BigInteger: modulus not positive");
         }
         boolean exponentNeg = exponent.negative;
-        if(exponentNeg && mod(m).compareTo(ZERO) == 0){
+        if (exponentNeg && mod(m).compareTo(ZERO) == 0) {
             throw new ArithmeticException("BigInteger not invertible");
         } else if (mod(m).compareTo(ZERO) == 0) {
             return (BigIntegerBytesList) ZERO.clone();
@@ -847,7 +871,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         for (; i.compareTo(exponent) < 0; i = i.add(ONE)) {
             r = r.multiply(a).mod(m);
         }
-        if(exponentNeg){
+        if (exponentNeg) {
             r = r.modInverse(m);
         }
         return r;
@@ -859,19 +883,28 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return sm.multiply(this, val);
     }
 
-    @Override
-    public BigIntegerBytesList nextProbablePrime() {
-        if(compareTo(ZERO) < 0){
+    private BigIntegerBytesList nextProbablePrime(int certainty) {
+        if (compareTo(ZERO) < 0) {
             throw new ArithmeticException("start < 0: -1");
         }
-        if(compareTo(ONE) <= 0){
+        if (compareTo(ONE) <= 0) {
             return (BigIntegerBytesList) TWO.clone();
         }
-        BigIntegerBytesList i = this.add(ONE);
-        while(!i.isProbablePrime(100)){
+        BigIntegerBytesList i;
+        if (this.mod(TWO).compareTo(ZERO) == 0) {
+            i = this.add(ONE);
+        } else {
+            i = this.add(TWO);
+        }
+        while (!i.isProbablePrime(certainty)) {
             i = i.add(TWO);
         }
         return i;
+    }
+
+    @Override
+    public BigIntegerBytesList nextProbablePrime() {
+        return nextProbablePrime(100);
     }
 
     @Override
@@ -1102,18 +1135,18 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public boolean testBit(int n) {
-        if(n < 0){
+        if (n < 0) {
             throw new ArithmeticException("n is negative");
         }
-        boolean result = ! this.and(ONE.shiftLeft(n)).equals(ZERO);
+        boolean result = !this.and(ONE.shiftLeft(n)).equals(ZERO);
         return result;
     }
-    
-    public static BigIntegerBytesList probablePrime(int bitLength, Random rnd){
+
+    public static BigIntegerBytesList probablePrime(int bitLength, Random rnd) {
         return null;
     }
-    
-    public static BigIntegerBytesList valueOf(long val){
+
+    public static BigIntegerBytesList valueOf(long val) {
         return new BigIntegerBytesList(String.valueOf(val));
     }
 
@@ -1137,7 +1170,7 @@ class Digit {
     public void setDigit(byte digit) {
         this.digit = digit;
     }
-    
+
     @Override
     protected Object clone() {
         return new Digit(digit);
