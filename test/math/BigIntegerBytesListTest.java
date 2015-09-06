@@ -1470,4 +1470,34 @@ public class BigIntegerBytesListTest {
         AbstractBigInteger big4 = createNumber("758962721365");
         assertEquals(bigO4.testBit(12),big4.testBit(12));
     }
+    
+    //Test getLowestSetBit()
+    @Test 
+    public void testGetLowestSetBit(){
+        java.math.BigInteger bigO = new BigInteger("1254863");
+        AbstractBigInteger big = createNumber("1254863");
+        assertEquals(bigO.getLowestSetBit(),big.getLowestSetBit());
+        
+        java.math.BigInteger bigO1 = new BigInteger("2355478962");
+        AbstractBigInteger big1 = createNumber("2355478962");
+        assertEquals(bigO1.getLowestSetBit(),big1.getLowestSetBit());
+        
+        java.math.BigInteger bigO2 = new BigInteger("-8546982");
+        AbstractBigInteger big2 = createNumber("-8546982");
+        assertEquals(bigO2.getLowestSetBit(),big2.getLowestSetBit());
+        
+        java.math.BigInteger bigO3 = new BigInteger("-123547");
+        AbstractBigInteger big3 = createNumber("-123547");
+        assertEquals(bigO3.getLowestSetBit(),big3.getLowestSetBit());
+        
+        java.math.BigInteger bigO4 = new BigInteger("13647854");
+        AbstractBigInteger big4 = createNumber("13647854");
+        assertEquals(bigO4.getLowestSetBit(),big4.getLowestSetBit());
+        
+        java.math.BigInteger bigO5 = new BigInteger("2321324564782145785233");
+        AbstractBigInteger big5 = createNumber("2321324564782145785233");
+        assertEquals(bigO5.getLowestSetBit(),big5.getLowestSetBit());
+        
+        
+    }
 }

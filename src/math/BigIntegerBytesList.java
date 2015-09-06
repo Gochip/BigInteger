@@ -755,7 +755,16 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public int getLowestSetBit() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       if(this.equals(ZERO)){
+           return -1;
+       }
+       String binary = this.toString(2);
+       for(int i = 0,j=binary.length()-1; j >= 0; i++,j--){
+           if(binary.charAt(j) == '1'){
+               return i;
+           }
+       }
+       return -1;
     }
 
     @Override

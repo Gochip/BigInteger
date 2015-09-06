@@ -15,9 +15,8 @@ import math.BigIntegerBytesList;
  */
 public class Prueba {
     public static void main(String args[]){
-        BigIntegerBytesList big = new BigIntegerBytesList("101001",2);
-        BigInteger b  = new BigInteger("101001",2);
-        System.out.println(b.testBit(0)+" "+big.testBit(0));
-        
+        BigIntegerBytesList big = new BigIntegerBytesList("000000",2);
+        BigInteger b  = new BigInteger("000000",2);
+        System.out.println(b.getLowestSetBit() +" "+ big.getLowestSetBit());
     }
 }
