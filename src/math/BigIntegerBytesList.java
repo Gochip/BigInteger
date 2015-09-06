@@ -69,20 +69,47 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         }
     }
 
+    /**
+     * val is in complement to 2.
+     * @param val is in complement to 2
+     * @return the binary number
+     * @deprecated 
+     */
     private String getBinary(byte[] val) {
         StringBuilder resString = new StringBuilder();
         for (int i = 0; i < val.length; i++) {
-            String v = Integer.toBinaryString(val[i]);
-            // Substring for negatives.
-            v = v.substring(Math.max(v.length() - 8, 0));
-            // v.length() <= 8
-            while (v.length() < 8) {
-                v = "0" + v;
+            String binary = Integer.toBinaryString(val[i]);
+            // Substring for negatives because the integers are 32 bits .
+            binary = binary.substring(Math.max(binary.length() - 8, 0));
+            // binary.length() <= 8
+            while (binary.length() < 8) {
+                binary = "0" + binary;
             }
-            resString.append(v);
+            resString.append(binary);
         }
         String complement = complement(resString.toString());
         return complement;
+    }
+    
+    /**
+     * to string of val.
+     * result.len is multiple of 8.
+     * @param val
+     * @return 
+     */
+    private static String toStringBytes(byte[] val) {
+        StringBuilder resString = new StringBuilder();
+        for (int i = 0; i < val.length; i++) {
+            String binary = Integer.toBinaryString(val[i]);
+            // Substring for negatives because the integers are 32 bits .
+            binary = binary.substring(Math.max(binary.length() - 8, 0));
+            // binary.length() <= 8
+            while (binary.length() < 8) {
+                binary = "0" + binary;
+            }
+            resString.append(binary);
+        }
+        return resString.toString();
     }
 
     private String getBinary2(byte[] val) {
@@ -106,9 +133,9 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         byte res[] = new byte[val.length];
         if (val[0] < 0) {
             // Negative.
-            String complement = getBinary(val);
-            for (int i = 0, j = 0; i < complement.length(); i += 8, j++) {
-                String part = complement.substring(i, i + 8);
+            String binary = complement(toStringBytes(val));
+            for (int i = 0, j = 0; i < binary.length(); i += 8, j++) {
+                String part = binary.substring(i, i + 8);
                 // Byte.parseByte no se puede utilizar porque solo puede hasta 7 bits.
                 short aux = Short.parseShort(part, 2);
                 res[j] = (byte) aux;
@@ -120,16 +147,17 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
                 res[i] = val[i];
             }
         }
-        byte mascara;
-        BigIntegerBytesList multiplicador = ONE;
-        BigIntegerBytesList result = new BigIntegerBytesList("0");
+        // Convert res 2 to 10.
+        byte mask;
+        BigIntegerBytesList mult = ONE;
+        BigIntegerBytesList result = ZERO;
         for (int i = res.length - 1; i >= 0; i--) {
-            mascara = 1;
-            while (mascara != 0) {
-                BigIntegerBytesList big = ((res[i] & mascara) == (byte) mascara) ? ONE : ZERO;
-                result = result.add(multiplicador.multiply(big));
-                multiplicador = multiplicador.multiply(TWO);
-                mascara <<= 1;
+            mask = 1;
+            while (mask != 0) {
+                BigIntegerBytesList big = ((res[i] & mask) == mask) ? ONE : ZERO;
+                result = result.add(mult.multiply(big));
+                mult = mult.multiply(TWO);
+                mask <<= 1;
             }
         }
         digits = result.digits;
@@ -232,8 +260,8 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         BigIntegerBytesList result = ZERO;
         for (int i = val.length() - 1; i >= until; i--) {
             char c = val.charAt(i);
-            if (Character.digit(c, radix) > -1) {
-                int value = getValueDigit(c);
+            int value = Character.digit(c, radix);
+            if (value > -1) {
                 result = result.add(mult.multiply(valueOf(value)));
                 mult = mult.multiply(valueOf(radix));
             } else {
@@ -766,6 +794,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
      * Return the value of the numeral.
      * @param c the numeral
      * @return the value
+     * @deprecated 
      */
     private int getValueDigit(char c) {
         if (Character.isDigit(c)) {
