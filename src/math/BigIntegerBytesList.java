@@ -1143,7 +1143,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     }
 
     public static BigIntegerBytesList probablePrime(int bitLength, Random rnd) {
-        return null;
+        return getRandomPrime(bitLength, 100, rnd);
     }
 
     public static BigIntegerBytesList valueOf(long val) {
