@@ -451,7 +451,11 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public BigIntegerBytesList flipBit(int n) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(n<0){
+            throw new ArithmeticException("n is negative");
+        }
+        BigIntegerBytesList result = this.xor(ONE.shiftLeft(n));
+        return result;
     }
 
     @Override
