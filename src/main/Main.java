@@ -20,8 +20,10 @@ public class Main {
 
 //        java.math.BigInteger bigOriginal1 = new java.math.BigInteger(5, 100, new Random());
 //        System.out.println(bigOriginal1.toString());
-        System.out.println(new java.math.BigInteger(23, new byte[]{2}));
-        System.out.println(new math.BigIntegerBytesList("12345", 8));
+        System.out.println(new java.math.BigInteger(12, 100, new Random()));
+        System.out.println(new math.BigIntegerBytesList(12, 100, new Random()));
+        
+//        System.out.println(new math.BigIntegerBytesList("11").isProbablePrime(100));
 
 //        BigIntegerBytesList big = new math.BigIntegerBytesList("-001111000000000001111111111110011110000000000011111111111100111100000000000111111111111001111000000000001111111111110011110000000000011111111111100", 2);
 //        System.out.println(bigOriginal1.toString());

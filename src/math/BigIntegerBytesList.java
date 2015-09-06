@@ -138,8 +138,10 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     private static BigIntegerBytesList getRandomPrime(int bitLength, int certainty, Random rnd) {
         BigIntegerBytesList from = TWO.pow(bitLength - 1).add(ONE);
         BigIntegerBytesList until = TWO.pow(bitLength);
-        int r = (int) (rnd.nextDouble() * 100);
-        BigIntegerBytesList big = new BigIntegerBytesList(String.valueOf(r)).multiply(until).divide(new BigIntegerBytesList("100")).add(from);
+        int factor = 100;
+        int r = (int) (rnd.nextDouble() * factor);
+        BigIntegerBytesList diff = until.subtract(from);
+        BigIntegerBytesList big = valueOf(r).multiply(diff).divide(valueOf(factor)).add(from);
         BigIntegerBytesList i;
         if (big.isProbablePrime(certainty)) {
             return big;
@@ -172,12 +174,13 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         }
         byte[] bytes = new byte[(int) (Math.ceil((double) numBits / 8.0))];
         rnd.nextBytes(bytes);
-        int tmp = numBits % 8;
+        
+        int validBits = numBits % 8;
         int mask;
-        if (tmp == 0) {
+        if (validBits == 0) {
             mask = (int) 0xff;
         } else {
-            mask = (int) (Math.pow(2, tmp) - 1);
+            mask = (int) (Math.pow(2, validBits) - 1);
         }
         bytes[0] &= mask;
         return bytes;
@@ -781,11 +784,13 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public boolean isProbablePrime(int certainty) {
-        if (this.compareTo(TWO) == 0 || this.compareTo(TWO.add(ONE)) == 0) {
-            return true;
+        int[] primes = {2, 3, 5, 7, 11, 13, 17, 19};
+        for (int i = 0; i < primes.length; i++) {
+            if(valueOf(primes[i]).equals(this)){
+                return true;
+            }
         }
         BigIntegerBytesList thisMinusOne = this.subtract(ONE);
-        int[] primo = {2, 3, 5, 7, 11, 13, 17, 19};
         int s = 0;
         boolean esPrimo = true;
         BigIntegerBytesList a, r, y;
@@ -797,7 +802,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         r = thisMinusOne;
         thisMinusOne = this.subtract(ONE);
         for (int i = 0; i <= 7; i++) {
-            a = new BigIntegerBytesList(String.valueOf(primo[i]));
+            a = new BigIntegerBytesList(String.valueOf(primes[i]));
             y = a.modPow(r, this);
             if (y.compareTo(ONE) != 0 && y.compareTo(thisMinusOne) != 0) {
                 j = 1;
