@@ -1195,6 +1195,16 @@ public class BigIntegerBytesListTest {
         assertEquals(bigOriginal1.not().toString(), big1.not().toString());
     }
 
+    //Test
+    @Test
+    public void testConstructor(){
+        java.math.BigInteger bigO = new BigInteger("125489",8);
+        AbstractBigInteger big = createNumber("125489", 8);
+        assertEquals(bigO.toString(), big.toString());
+    }
+    
+    
+    
     // TEST constructor (byte[])
     @Test
     public void testConstructorBytes() {
