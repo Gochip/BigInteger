@@ -1,7 +1,6 @@
 package math;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
@@ -18,26 +17,31 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     public static final BigIntegerBytesList TEN = new BigIntegerBytesList("10");
 
     /**
-     * The digits in big-endian.
+     * The digits in big-endian. Each digit represent 0 to 9.
      */
     protected ArrayList<Digit> digits;
 
+    /**
+     * Flag indicate if this number is negative.
+     */
     protected boolean negative;
 
     public BigIntegerBytesList(String number) {
         if (number.length() == 0) {
-            throw new NumberFormatException();
+            throw new NumberFormatException("Zero length BigIntegerBytesList");
+        }
+        char first = number.charAt(0);
+        int since = 0;
+        if(first == '-' || first == '+'){
+            negative = first == '-';
+            since = 1;
         }
         this.digits = new ArrayList<>();
-        for (int i = 0; i < number.length(); i++) {
+        for (int i = since; i < number.length(); i++) {
             char c = number.charAt(i);
             if (Character.isDigit(c)) {
                 Digit digit = new Digit(Byte.parseByte(String.valueOf(c)));
                 this.digits.add(digit);
-            } else if (i == 0 && (c == '-' || c == '+')) {
-                if (c == '-') {
-                    negative = true;
-                }
             } else {
                 throw new NumberFormatException("For input string: " + number);
             }

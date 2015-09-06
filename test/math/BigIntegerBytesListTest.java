@@ -1195,6 +1195,80 @@ public class BigIntegerBytesListTest {
         assertEquals(bigOriginal1.not().toString(), big1.not().toString());
     }
 
+    // TEST constructor (string)
+    @Test
+    public void testConstructorString() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("12316651");
+        AbstractBigInteger big1 = createNumber("12316651");
+        assertEquals(bigOriginal1.toString(), big1.toString());
+    }
+    
+    @Test
+    public void testConstructorString2() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("-12316651");
+        AbstractBigInteger big1 = createNumber("-12316651");
+        assertEquals(bigOriginal1.toString(), big1.toString());
+    }
+    
+    @Test
+    public void testConstructorString3() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("-0");
+        AbstractBigInteger big1 = createNumber("-0");
+        assertEquals(bigOriginal1.toString(), big1.toString());
+    }
+    
+    @Test
+    public void testConstructorString4() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("99999999444444555555633123156848651");
+        AbstractBigInteger big1 = createNumber("99999999444444555555633123156848651");
+        assertEquals(bigOriginal1.toString(), big1.toString());
+    }
+    
+    @Test
+    public void testConstructorString5() {
+        exception.expect(NumberFormatException.class);
+        AbstractBigInteger big1 = createNumber("9999999944444455555563312315a6848651");
+    }
+    
+    @Test
+    public void testConstructorString6() {
+        exception.expect(NumberFormatException.class);
+        AbstractBigInteger big1 = createNumber("99999999444444555555633123156848651a");
+    }
+    
+    @Test
+    public void testConstructorString7() {
+        exception.expect(NumberFormatException.class);
+        AbstractBigInteger big1 = createNumber("--99999999444444555555633123156848651");
+    }
+    
+    @Test
+    public void testConstructorString8() {
+        exception.expect(NumberFormatException.class);
+        AbstractBigInteger big1 = createNumber("4.365252");
+    }
+    
+    @Test
+    public void testConstructorString9() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("+456123");
+        AbstractBigInteger big1 = createNumber("+456123");
+        assertEquals(bigOriginal1.toString(), big1.toString());
+    }
+    
+    @Test
+    public void testConstructorString10() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("000000");
+        AbstractBigInteger big1 = createNumber("000000");
+        assertEquals(bigOriginal1.toString(), big1.toString());
+    }
+    
+    @Test
+    public void testConstructorString11() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("-000000");
+        AbstractBigInteger big1 = createNumber("-000000");
+        assertEquals(bigOriginal1.toString(), big1.toString());
+    }
+    
     // TEST constructor (byte[])
     @Test
     public void testConstructorBytes() {
