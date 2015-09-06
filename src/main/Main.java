@@ -18,9 +18,11 @@ public class Main {
     public static void main(String args[]) {
 //        System.out.println(Integer.toBinaryString(-5));
         
-        java.math.BigInteger bigOriginal1 = new java.math.BigInteger(5, 100, new Random());
-        System.out.println(bigOriginal1.toString());
-
+//        java.math.BigInteger bigOriginal1 = new java.math.BigInteger(5, 100, new Random());
+//        System.out.println(bigOriginal1.toString());
+        
+        System.out.println(new java.math.BigInteger("a", 16));
+        System.out.println(new math.BigIntegerBytesList("12345", 8));
         
 //        BigIntegerBytesList big = new math.BigIntegerBytesList("-001111000000000001111111111110011110000000000011111111111100111100000000000111111111111001111000000000001111111111110011110000000000011111111111100", 2);
 //        System.out.println(bigOriginal1.toString());
@@ -29,8 +31,8 @@ public class Main {
 //        java.math.BigInteger bigOriginal2 = new java.math.BigInteger("-875287965485");
 //        System.out.println(Arrays.toString(bigOriginal1.toByteArray()));
 
-        AbstractBigInteger big1 = new math.BigIntegerBytesList(5, 100, new Random());
-        System.out.println(big1.toString());
+//        AbstractBigInteger big1 = new math.BigIntegerBytesList(5, 100, new Random());
+//        System.out.println(big1.toString());
 
 //        AbstractBigInteger big2 = new math.BigIntegerBytesList("-875287965485");
 //        System.out.println(Arrays.toString(big1.toByteArray()));

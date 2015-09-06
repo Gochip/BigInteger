@@ -1269,6 +1269,42 @@ public class BigIntegerBytesListTest {
         assertEquals(bigOriginal1.toString(), big1.toString());
     }
     
+    // TEST constructor (String, radix)
+    @Test
+    public void testConstructorStringRadix1() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("156156", 8);
+        AbstractBigInteger big1 = createNumber("156156", 8);
+        assertEquals(bigOriginal1.toString(), big1.toString());
+    }
+    
+    @Test
+    public void testConstructorStringRadix2() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("156156AFFFDDGGHHAAAa", 25);
+        AbstractBigInteger big1 = createNumber("156156AFFFDDGGHHAAAa", 25);
+        assertEquals(bigOriginal1.toString(), big1.toString());
+    }
+    
+    @Test
+    public void testConstructorStringRadix3() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("abcdfggkdsxzff645fshudjkr7456fsdrfsdgerfsd798465312", 36);
+        AbstractBigInteger big1 = createNumber("abcdfggkdsxzff645fshudjkr7456fsdrfsdgerfsd798465312", 36);
+        assertEquals(bigOriginal1.toString(), big1.toString());
+    }
+    
+    @Test
+    public void testConstructorStringRadix4() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("-adsfdsf845689456bfsd8456cdfggkdsxzff645fshudjkr7456fsdrfsdgerfsd798465", 36);
+        AbstractBigInteger big1 = createNumber("-adsfdsf845689456bfsd8456cdfggkdsxzff645fshudjkr7456fsdrfsdgerfsd798465", 36);
+        assertEquals(bigOriginal1.toString(), big1.toString());
+    }
+    
+    @Test
+    public void testConstructorStringRadix5() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("111110100000011111011000000110010000111", 2);
+        AbstractBigInteger big1 = createNumber("111110100000011111011000000110010000111", 2);
+        assertEquals(bigOriginal1.toString(), big1.toString());
+    }
+    
     // TEST constructor (byte[])
     @Test
     public void testConstructorBytes() {

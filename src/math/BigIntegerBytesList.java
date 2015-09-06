@@ -1,6 +1,7 @@
 package math;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
@@ -15,6 +16,8 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     public static final BigIntegerBytesList ONE = new BigIntegerBytesList("1");
     public static final BigIntegerBytesList TWO = new BigIntegerBytesList("2");
     public static final BigIntegerBytesList TEN = new BigIntegerBytesList("10");
+    private static final char LETTERS_MINUS[] = new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+    private static final char LETTERS_MAYUS[] = new char[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
 
     /**
      * The digits in big-endian. Each digit represent 0 to 9.
@@ -30,15 +33,28 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         if (number.length() == 0) {
             throw new NumberFormatException("Zero length BigIntegerBytesList");
         }
+
+        // Determine the sign.
         char first = number.charAt(0);
         int since = 0;
-        if(first == '-' || first == '+'){
+        if (first == '-' || first == '+') {
             negative = first == '-';
             since = 1;
         }
+
+        // Delete the zeros of the left.
+        int i = since;
+        char c = number.charAt(i);
+        while (i < number.length() - 1 && c == '0') {
+            i++;
+            c = number.charAt(i);
+        }
+        since = i;
+
+        // Create the number.
         this.digits = new ArrayList<>();
-        for (int i = since; i < number.length(); i++) {
-            char c = number.charAt(i);
+        for (i = since; i < number.length(); i++) {
+            c = number.charAt(i);
             if (Character.isDigit(c)) {
                 Digit digit = new Digit(Byte.parseByte(String.valueOf(c)));
                 this.digits.add(digit);
@@ -46,20 +62,10 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
                 throw new NumberFormatException("For input string: " + number);
             }
         }
-        int i = 0;
-        byte b = 0;
-        while (i < digits.size() && b == 0) {
-            b = digits.get(i).getDigit();
-            if (b == 0) {
-                digits.remove(i);
-            } else {
-                i++;
-            }
-        }
-        // Special cases: -0 or 0
-        if (digits.isEmpty()) {
-            digits.add(new Digit((byte) 0));
-            this.negative = false;
+
+        // Special case: -0, because is not negative.
+        if (digits.size() == 1 && digits.get(0).getDigit() == 0) {
+            negative = false;
         }
     }
 
@@ -173,7 +179,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
             }
             while (!i.isProbablePrime(certainty)) {
                 i = i.add(TWO);
-                if(i.compareTo(until) >= 0){
+                if (i.compareTo(until) >= 0) {
                     i = from;
                 }
             }
@@ -206,31 +212,35 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     }
 
     public BigIntegerBytesList(String val, int radix) {
+        if (val.length() == 0) {
+            throw new NumberFormatException("Zero length BigIntegerBytesList");
+        }
         if (radix < Character.MIN_RADIX || radix > Character.MAX_RADIX) {
             throw new NumberFormatException("Radix out of range");
         }
-        if (val.charAt(0) == '-') {
-            this.negative = true;
-        }
+
+        // Determine the sign.
+        char first = val.charAt(0);
         int until = 0;
-        if (val.charAt(0) == '+' || val.charAt(0) == '-') {
-            // Ignore the first digit, i.e. the sign.
+        if (first == '-' || first == '+') {
+            negative = first == '-';
             until = 1;
         }
-        BigIntegerBytesList bigRadix = new BigIntegerBytesList(String.valueOf(radix));
-        BigIntegerBytesList mult = ONE;
-        BigIntegerBytesList big = ZERO;
+
+        // 439 = 4 * radix ^ 2 + 3 * radix ^ 1 + 9 * radix ^ 0
+        BigIntegerBytesList mult = ONE; // pow(radix, 0) = 1
+        BigIntegerBytesList result = ZERO;
         for (int i = val.length() - 1; i >= until; i--) {
-            String dig = String.valueOf(val.charAt(i));
-            BigIntegerBytesList bigDig = new BigIntegerBytesList(dig);
-            if (bigDig.compareTo(bigRadix) < 0) {
-                big = big.add(mult.multiply(bigDig));
-                mult = mult.add(mult);
+            char c = val.charAt(i);
+            if (Character.digit(c, radix) > -1) {
+                int value = getValueDigit(c);
+                result = result.add(mult.multiply(valueOf(value)));
+                mult = mult.multiply(valueOf(radix));
             } else {
-                throw new NumberFormatException("Error en el formato del número: " + val);
+                throw new NumberFormatException("For input string: " + val);
             }
         }
-        this.digits = big.digits;
+        this.digits = result.digits;
     }
 
     @Override
@@ -479,7 +489,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     @Override
     public BigIntegerBytesList flipBit(int n) {
-        if(n<0){
+        if (n < 0) {
             throw new ArithmeticException("n is negative");
         }
         BigIntegerBytesList result = this.xor(ONE.shiftLeft(n));
@@ -752,27 +762,47 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return result;
     }
 
+    /**
+     * Return the value of the numeral.
+     * @param c the numeral
+     * @return the value
+     */
+    private int getValueDigit(char c) {
+        if (Character.isDigit(c)) {
+            return Integer.parseInt(String.valueOf(c));
+        } else {
+            if(c >= 65 && c <= 90){
+                // MAYUS
+                return c - 55;
+            }else if(c >= 97 && c <= 122){
+                // MINUS
+                return c - 87;
+            }else{
+                throw new NumberFormatException("Error in the number format: " + c);
+            }
+        }
+    }
+
     private String getNumbersOrLetters(int n) {
         if (n < 10) {
             return String.valueOf(n);
         } else {
-            char letters[] = new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-            return String.valueOf(letters[n - 10]);
+            return String.valueOf(LETTERS_MINUS[n - 10]);
         }
     }
 
     @Override
     public int getLowestSetBit() {
-       if(this.equals(ZERO)){
-           return -1;
-       }
-       String binary = this.toString(2);
-       for(int i = 0,j=binary.length()-1; j >= 0; i++,j--){
-           if(binary.charAt(j) == '1'){
-               return i;
-           }
-       }
-       return -1;
+        if (this.equals(ZERO)) {
+            return -1;
+        }
+        String binary = this.toString(2);
+        for (int i = 0, j = binary.length() - 1; j >= 0; i++, j--) {
+            if (binary.charAt(j) == '1') {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
