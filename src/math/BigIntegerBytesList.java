@@ -174,7 +174,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         }
         byte[] bytes = new byte[(int) (Math.ceil((double) numBits / 8.0))];
         rnd.nextBytes(bytes);
-        
+
         int validBits = numBits % 8;
         int mask;
         if (validBits == 0) {
@@ -225,7 +225,8 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         for (int i = 0; i < digits.size(); i++) {
             bigAbs.digits.add((Digit) digits.get(i).clone());
         }
-        return (negative) ? negate() : bigAbs;
+        bigAbs.negative = false;
+        return bigAbs;
     }
 
     @Override
@@ -299,6 +300,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
             bigMenor = bigMayor;
             bigMayor = tmp;
         }
+        // Copiar para tener el mismo tamaño.
         byte[] tmp = new byte[max];
         for (int i = 1; i <= min; i++) {
             tmp[tmp.length - i] = bigMenor[bigMenor.length - i];
@@ -310,6 +312,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         }
         bigMenor = tmp;
 
+        // Operation and.
         byte[] result = new byte[max];
         for (int i = 0; i < max; i++) {
             result[i] = (byte) (bigMenor[i] & bigMayor[i]);
@@ -346,8 +349,8 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         if (n < 0) {
             throw new ArithmeticException("Negative bit address");
         }
-        BigIntegerBytesList mask2 = ONE.shiftLeft(n).not();
-        return and(mask2);
+        BigIntegerBytesList mask = ONE.shiftLeft(n).not();
+        return and(mask);
     }
 
     @Override
@@ -553,7 +556,10 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     @Override
     public BigIntegerBytesList negate() {
         BigIntegerBytesList bigNeg = new BigIntegerBytesList("0");
-        bigNeg.digits = digits;
+        bigNeg.digits = new ArrayList<>();
+        for (int i = 0; i < digits.size(); i++) {
+            bigNeg.digits.add((Digit) digits.get(i).clone());
+        }
         bigNeg.negative = !negative;
         return bigNeg;
     }
@@ -646,8 +652,11 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
             char c = result.charAt(i);
             if (c == '1') {
                 result.replace(i, i + 1, "0");
-            } else {
+            } else if (c == '0') {
                 result.replace(i, i + 1, "1");
+            } else {
+                // Ignore
+                throw new NumberFormatException("Error");
             }
         }
         return result.toString();
@@ -760,7 +769,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         }
     }
 
-    private String getNumbersOrLetters(int n) {
+    private static String getNumbersOrLetters(int n) {
         if (n < 10) {
             return String.valueOf(n);
         } else {
@@ -786,7 +795,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     public boolean isProbablePrime(int certainty) {
         int[] primes = {2, 3, 5, 7, 11, 13, 17, 19};
         for (int i = 0; i < primes.length; i++) {
-            if(valueOf(primes[i]).equals(this)){
+            if (valueOf(primes[i]).equals(this)) {
                 return true;
             }
         }
@@ -801,7 +810,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         }
         r = thisMinusOne;
         thisMinusOne = this.subtract(ONE);
-        for (int i = 0; i <= 7; i++) {
+        for (int i = 0; i <= certainty; i++) {
             a = new BigIntegerBytesList(String.valueOf(primes[i]));
             y = a.modPow(r, this);
             if (y.compareTo(ONE) != 0 && y.compareTo(thisMinusOne) != 0) {
@@ -872,10 +881,6 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
             throw new ArithmeticException("BigInteger not invertible");
         } else if (mod(m).compareTo(ZERO) == 0) {
             return (BigIntegerBytesList) ZERO.clone();
-        } else if (gcd(m).compareTo(ONE) != 0) {
-            // Relative prime
-            //BigIntegerBytesList t = exponent.mod(m.subtract(ONE));
-            //exponent = (BigIntegerBytesList) t.clone();
         }
         exponent = exponent.abs();
         BigIntegerBytesList i = ONE;
@@ -905,8 +910,10 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         }
         BigIntegerBytesList i;
         if (this.mod(TWO).compareTo(ZERO) == 0) {
+            // even
             i = this.add(ONE);
         } else {
+            // odd
             i = this.add(TWO);
         }
         while (!i.isProbablePrime(certainty)) {
@@ -1030,12 +1037,10 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
             return shiftRight(n * -1);
         }
         String binary = toString(2);
-        StringBuilder displacement = new StringBuilder();
+        StringBuilder resultString = new StringBuilder(binary);
         for (int i = 0; i < n; i++) {
-            displacement.append("0");
+            resultString.append("0");
         }
-        StringBuilder resultString = new StringBuilder(displacement);
-        resultString.insert(0, binary);
         BigIntegerBytesList result = new BigIntegerBytesList(resultString.toString(), 2);
         return result;
     }
@@ -1048,7 +1053,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         String binary = toString(2);
         String padding = "0";
         if (negative) {
-            binary = complement(binary);
+            binary = complement(binary.substring(1));
             padding = "1";
         }
         StringBuilder displacement = new StringBuilder();
@@ -1056,7 +1061,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
             displacement.append(padding);
         }
         StringBuilder resultString = new StringBuilder(displacement);
-        resultString.append(binary.substring(0, binary.length() - n));
+        resultString.append(binary.substring(0, Math.max(0, binary.length() - n)));
         String rs = null;
         if (negative) {
             rs = complement(resultString.toString());
@@ -1073,9 +1078,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         int sig = 1;
         if (this.negative) {
             sig = -1;
-        } /*else if (this.digits.get(0).getDigit() == 0) {
-         sig = 0;
-         }*/ else if (this.equals(ZERO)) {
+        } else if (this.digits.get(0).getDigit() == 0) {
             sig = 0;
         }
         return sig;
@@ -1092,8 +1095,8 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         while (quotient.abs().compareTo(ZERO) != 0) {
             BigIntegerBytesList[] tmp = quotient.divideAndRemainder(radixBigInteger);
             quotient = tmp[0];
-            String remainder = getNumbersOrLetters(tmp[1].abs().intValue());
-            resultString.insert(0, remainder);
+            String numeral = getNumbersOrLetters(tmp[1].abs().intValue());
+            resultString.insert(0, numeral);
         }
         if (quotient.negative) {
             resultString.insert(0, "-");
