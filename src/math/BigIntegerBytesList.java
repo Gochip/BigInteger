@@ -71,31 +71,23 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     /**
      * val is in complement to 2.
+     *
      * @param val is in complement to 2
      * @return the binary number
-     * @deprecated 
      */
-    private String getBinary(byte[] val) {
-        StringBuilder resString = new StringBuilder();
-        for (int i = 0; i < val.length; i++) {
-            String binary = Integer.toBinaryString(val[i]);
-            // Substring for negatives because the integers are 32 bits .
-            binary = binary.substring(Math.max(binary.length() - 8, 0));
-            // binary.length() <= 8
-            while (binary.length() < 8) {
-                binary = "0" + binary;
-            }
-            resString.append(binary);
+    private static String getBinaryComplementTo2(byte[] val) {
+        String binary = toStringBytes(val);
+        if (val[0] < 0) {
+            binary = complement(binary);
         }
-        String complement = complement(resString.toString());
-        return complement;
+        return binary;
     }
-    
+
     /**
-     * to string of val.
-     * result.len is multiple of 8.
+     * to string of val. result.len is multiple of 8.
+     *
      * @param val
-     * @return 
+     * @return
      */
     private static String toStringBytes(byte[] val) {
         StringBuilder resString = new StringBuilder();
@@ -112,79 +104,31 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return resString.toString();
     }
 
-    private String getBinary2(byte[] val) {
-        StringBuilder resString = new StringBuilder();
-        for (int i = 0; i < val.length; i++) {
-            String v = Integer.toBinaryString(val[i]);
-            // Substring for negatives.
-            v = v.substring(Math.max(v.length() - 8, 0));
-            // v.length() <= 8
-            while (v.length() < 8) {
-                v = "0" + v;
-            }
-            resString.append(v);
-        }
-        return resString.toString();
-    }
-
     public BigIntegerBytesList(byte[] val) {
-        // Convert to String.
-        // Subtract bit to bit. C2 = 2^n - N => N = 2^n - C2.
-        byte res[] = new byte[val.length];
+        this(getBinaryComplementTo2(val), 2);
         if (val[0] < 0) {
-            // Negative.
-            String binary = complement(toStringBytes(val));
-            for (int i = 0, j = 0; i < binary.length(); i += 8, j++) {
-                String part = binary.substring(i, i + 8);
-                // Byte.parseByte no se puede utilizar porque solo puede hasta 7 bits.
-                short aux = Short.parseShort(part, 2);
-                res[j] = (byte) aux;
-            }
             negative = true;
-        } else {
-            // Positive
-            for (int i = 0; i < res.length; i++) {
-                res[i] = val[i];
-            }
         }
-        // Convert res 2 to 10.
-        byte mask;
-        BigIntegerBytesList mult = ONE;
-        BigIntegerBytesList result = ZERO;
-        for (int i = res.length - 1; i >= 0; i--) {
-            mask = 1;
-            while (mask != 0) {
-                BigIntegerBytesList big = ((res[i] & mask) == mask) ? ONE : ZERO;
-                result = result.add(mult.multiply(big));
-                mult = mult.multiply(TWO);
-                mask <<= 1;
-            }
-        }
-        digits = result.digits;
     }
 
-    public BigIntegerBytesList(int signum, byte[] magnitude) {
+    private static String magnitude(int signum, byte[] magnitude) {
+        if (signum < -1 || signum > 1) {
+            throw new NumberFormatException("Invalid signum value");
+        }
         if (signum == 0 && magnitude.length > 0) {
             throw new NumberFormatException("signum-magnitude mismatch");
         }
-        String binary = getBinary2(magnitude);
+        if (magnitude.length == 0 || signum == 0) {
+            return "0";
+        }
+        return toStringBytes(magnitude);
+    }
+
+    public BigIntegerBytesList(int signum, byte[] magnitude) {
+        this(magnitude(signum, magnitude), 2);
         if (signum == -1) {
             negative = true;
         }
-        BigIntegerBytesList bigRadix = new BigIntegerBytesList("2");
-        BigIntegerBytesList mult = ONE;
-        BigIntegerBytesList big = ZERO;
-        for (int i = binary.length() - 1; i >= 0; i--) {
-            String dig = String.valueOf(binary.charAt(i));
-            BigIntegerBytesList bigDig = new BigIntegerBytesList(dig);
-            if (bigDig.compareTo(bigRadix) < 0) {
-                big = big.add(mult.multiply(bigDig));
-                mult = mult.add(mult);
-            } else {
-                throw new NumberFormatException("Error en el formato del número: " + binary);
-            }
-        }
-        this.digits = big.digits;
     }
 
     public BigIntegerBytesList(int bitLength, int certainty, Random rnd) {
@@ -792,21 +736,22 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     /**
      * Return the value of the numeral.
+     *
      * @param c the numeral
      * @return the value
-     * @deprecated 
+     * @deprecated
      */
     private int getValueDigit(char c) {
         if (Character.isDigit(c)) {
             return Integer.parseInt(String.valueOf(c));
         } else {
-            if(c >= 65 && c <= 90){
+            if (c >= 65 && c <= 90) {
                 // MAYUS
                 return c - 55;
-            }else if(c >= 97 && c <= 122){
+            } else if (c >= 97 && c <= 122) {
                 // MINUS
                 return c - 87;
-            }else{
+            } else {
                 throw new NumberFormatException("Error in the number format: " + c);
             }
         }
