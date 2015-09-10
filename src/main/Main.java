@@ -18,7 +18,8 @@ public class Main {
     public static void main(String args[]) {
 //        System.out.println(Integer.toBinaryString(-5));
 
-        System.out.println(new java.math.BigInteger("10").pow(0));
+        System.out.println(new java.math.BigInteger("-8").bitCount());
+        System.out.println(new math.BigIntegerBytesList("-8").bitCount());
         
         //System.out.println(Integer.parseInt("4865123894657451238465218645123846521384653121284652148651238946574512384652186451238465213846531212846521486512389465745123846521864512384652138465312128465214865123894657451238465218645123846521384653121284652148651238946574512384652186451238465213846531212846521486512389465745123846521864512384652"));
 //        System.out.println(new java.math.BigInteger("-8888").shiftRight(8));

@@ -231,6 +231,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     /**
      * Returns a BigInteger whose value is (this + val).
+     *
      * @param val value to be added to this BigInteger.
      * @return this + val
      */
@@ -292,7 +293,9 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     }
 
     /**
-     * Returns a BigInteger whose value is (this & val). (This method returns a negative BigInteger if and only if this and val are both negative.)
+     * Returns a BigInteger whose value is (this & val). (This method returns a
+     * negative BigInteger if and only if this and val are both negative.)
+     *
      * @param val value to be AND'ed with this BigInteger.
      * @return this & val
      */
@@ -322,17 +325,17 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         BigIntegerBytesList res = new BigIntegerBytesList(result);
         return res;
     }
-    
+
     /**
-     * Extiende el arreglo de bytes val a la cantidad de bytes max de acuerdo
-     * al signo de val.
-     * Si val es negativo entonces se rellena con 1s, si es positivo se rellena
-     * con 0s.
+     * Extiende el arreglo de bytes val a la cantidad de bytes max de acuerdo al
+     * signo de val. Si val es negativo entonces se rellena con 1s, si es
+     * positivo se rellena con 0s.
+     *
      * @param val
      * @param max
-     * @return 
+     * @return
      */
-    private byte[] extendTheSize(byte[] val, int max){
+    private byte[] extendTheSize(byte[] val, int max) {
         int min = val.length;
         byte[] tmp = new byte[max];
         for (int i = 1; i <= min; i++) {
@@ -346,19 +349,63 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return tmp;
     }
 
+    /**
+     * Returns a BigInteger whose value is (this & ~val). This method, which is
+     * equivalent to and(val.not()), is provided as a convenience for masking
+     * operations. (This method returns a negative BigInteger if and only if
+     * this is negative and val is positive.)
+     *
+     * @param val value to be complemented and AND'ed with this BigInteger.
+     * @return this & ~val
+     */
     @Override
     public BigIntegerBytesList andNot(BigIntegerBytesList val) {
         return this.and(val.not());
     }
 
+    /**
+     * Returns the number of bits in the two's complement representation of this
+     * BigInteger that differ from its sign bit. This method is useful when
+     * implementing bit-vector style sets atop BigIntegers.
+     *
+     * @return number of bits in the two's complement representation of this
+     * BigInteger that differ from its sign bit.
+     */
     @Override
     public int bitCount() {
-        return this.toByteArray().length * 8;
+        String binary = toString(2);
+        int count = 0;
+        char symbol = '0';
+        int since = 0;
+        if (this.negative) {
+            symbol = '1';
+            since = 1; // Excluyo el símbolo -.
+        }
+        for (int i = since; i < binary.length(); i++) {
+            if (binary.charAt(i) != symbol) {
+                count++;
+            }
+        }
+        return count;
     }
 
+    /**
+     * Returns the number of bits in the minimal two's-complement representation
+     * of this BigInteger, excluding a sign bit. For positive BigIntegers, this
+     * is equivalent to the number of bits in the ordinary binary
+     * representation. (Computes (ceil(log2(this < 0 ? -this : this+1))).)
+     * @return number of
+     *
+     * bits in the minimal two's-complement representation of this BigInteger,
+     * excluding a sign bit.
+     */
     @Override
     public int bitLength() {
-        return toString(2).length();
+        if (this.negative) {
+            return toString(2).length() - 1;
+        } else {
+            return toString(2).length();
+        }
     }
 
     /**
@@ -465,13 +512,13 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         int times = inside(tmp, divisor);
         i++;
         quotientString.append(String.valueOf(times));
-        
+
         // Multiplico divisor por el cociente.
         BigIntegerBytesList mult = divisor.multiply(new BigIntegerBytesList(String.valueOf(times)));
-        
+
         // Hago la resta.
         remainder = tmp.subtract(mult);
-        
+
         // A partir de este momento aplico el algoritmo de la división.
         for (; i < n; i++) {
             String remainderString = remainder.toString();
@@ -513,7 +560,9 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     }
 
     /**
-     * Returns a BigInteger whose value is equivalent to this BigInteger with the designated bit flipped. (Computes (this ^ (1<<n)).)
+     * Returns a BigInteger whose value is equivalent to this BigInteger with
+     * the designated bit flipped. (Computes (this ^ (1<<n)).)
+     *
      * @param n index of bit to flip.
      * @return this ^ (1<<n)
      * @throws ArithmeticException n is negative.
@@ -543,7 +592,9 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     }
 
     /**
-     * Returns a BigInteger whose value is the greatest common divisor of abs(this) and abs(val). Returns 0 if this==0 && val==0.
+     * Returns a BigInteger whose value is the greatest common divisor of
+     * abs(this) and abs(val). Returns 0 if this==0 && val==0.
+     *
      * @param val value with which the GCD is to be computed.
      * @return GCD(abs(this), abs(val))
      */
@@ -957,6 +1008,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
     /**
      * Returns a BigInteger whose value is (this * val).
+     *
      * @param val value to be multiplied by this BigInteger.
      * @return this * val
      */
@@ -1016,7 +1068,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
             bigMenor = bigMayor;
             bigMayor = tmp;
         }
-        
+
         bigMenor = extendTheSize(bigMenor, max);
 
         byte[] result = new byte[max];
@@ -1029,10 +1081,13 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     }
 
     /**
-     * Returns a BigInteger whose value is (this^exponent). Note that exponent is an integer rather than a BigInteger.
+     * Returns a BigInteger whose value is (this^exponent). Note that exponent
+     * is an integer rather than a BigInteger.
+     *
      * @param exponent exponent to which this BigInteger is to be raised.
      * @return this^exponent
-     * @throws ArithmeticException - exponent is negative. (This would cause the operation to yield a non-integer value.)
+     * @throws ArithmeticException - exponent is negative. (This would cause the
+     * operation to yield a non-integer value.)
      */
     @Override
     public BigIntegerBytesList pow(int exponent) {
@@ -1192,7 +1247,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
             bigMenor = bigMayor;
             bigMayor = tmp;
         }
-        
+
         bigMenor = extendTheSize(bigMenor, max);
 
         byte[] result = new byte[max];

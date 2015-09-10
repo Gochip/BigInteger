@@ -1284,6 +1284,64 @@ public class BigIntegerBytesListTest {
         assertEquals(bigOriginal1.andNot(bigOriginal2).toString(), big1.andNot(big2).toString());
     }
 
+    // TEST bitCount
+    @Test
+    public void testBitCount1() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("100");
+        AbstractBigInteger big1 = createNumber("100");
+        assertEquals(bigOriginal1.bitCount(), big1.bitCount());
+    }
+    
+    @Test
+    public void testBitCount2() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("-100");
+        AbstractBigInteger big1 = createNumber("-100");
+        assertEquals(bigOriginal1.bitCount(), big1.bitCount());
+    }
+    
+    @Test
+    public void testBitCount3() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("0");
+        AbstractBigInteger big1 = createNumber("0");
+        assertEquals(bigOriginal1.bitCount(), big1.bitCount());
+    }
+    
+    @Test
+    public void testBitCountExtreme() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("845612384651284651328465132846513264578465312");
+        AbstractBigInteger big1 = createNumber("845612384651284651328465132846513264578465312");
+        assertEquals(bigOriginal1.bitCount(), big1.bitCount());
+    }
+
+    // TEST bitLength
+    @Test
+    public void testBitLength1() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("100");
+        AbstractBigInteger big1 = createNumber("100");
+        assertEquals(bigOriginal1.bitLength(), big1.bitLength());
+    }
+    
+    @Test
+    public void testBitLength2() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("-100");
+        AbstractBigInteger big1 = createNumber("-100");
+        assertEquals(bigOriginal1.bitLength(), big1.bitLength());
+    }
+    
+    @Test
+    public void testBitLength3() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("0");
+        AbstractBigInteger big1 = createNumber("0");
+        assertEquals(bigOriginal1.bitLength(), big1.bitLength());
+    }
+    
+    @Test
+    public void testBitLengthExtreme() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("48651846513248651234512");
+        AbstractBigInteger big1 = createNumber("48651846513248651234512");
+        assertEquals(bigOriginal1.bitLength(), big1.bitLength());
+    }
+    
     // TEST not
     @Test
     public void testNot() {
