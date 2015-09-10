@@ -1573,7 +1573,7 @@ public class BigIntegerBytesListTest {
         AbstractBigInteger big2 = createNumber("5500");
         assertEquals(bigO2.pow(100).toString(), big2.pow(100).toString());
     }
-
+    
     @Test
     public void testPowArithmeticException() {
         AbstractBigInteger big2 = createNumber("256");

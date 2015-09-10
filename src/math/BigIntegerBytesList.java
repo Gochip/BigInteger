@@ -291,6 +291,11 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return result;
     }
 
+    /**
+     * Returns a BigInteger whose value is (this & val). (This method returns a negative BigInteger if and only if this and val are both negative.)
+     * @param val value to be AND'ed with this BigInteger.
+     * @return this & val
+     */
     @Override
     public BigIntegerBytesList and(BigIntegerBytesList val) {
         byte[] bigMenor = toByteArray();
@@ -306,16 +311,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
             bigMayor = tmp;
         }
         // Copiar para tener el mismo tamaño.
-        byte[] tmp = new byte[max];
-        for (int i = 1; i <= min; i++) {
-            tmp[tmp.length - i] = bigMenor[bigMenor.length - i];
-        }
-        if (bigMenor[0] < 0) {
-            for (int i = min + 1; i <= tmp.length; i++) {
-                tmp[tmp.length - i] = (byte) 255; // All ones.
-            }
-        }
-        bigMenor = tmp;
+        bigMenor = extendTheSize(bigMenor, max);
 
         // Operation and.
         byte[] result = new byte[max];
@@ -325,6 +321,29 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
 
         BigIntegerBytesList res = new BigIntegerBytesList(result);
         return res;
+    }
+    
+    /**
+     * Extiende el arreglo de bytes val a la cantidad de bytes max de acuerdo
+     * al signo de val.
+     * Si val es negativo entonces se rellena con 1s, si es positivo se rellena
+     * con 0s.
+     * @param val
+     * @param max
+     * @return 
+     */
+    private byte[] extendTheSize(byte[] val, int max){
+        int min = val.length;
+        byte[] tmp = new byte[max];
+        for (int i = 1; i <= min; i++) {
+            tmp[tmp.length - i] = val[val.length - i];
+        }
+        if (val[0] < 0) {
+            for (int i = min + 1; i <= tmp.length; i++) {
+                tmp[tmp.length - i] = (byte) 255; // All ones.
+            }
+        }
+        return tmp;
     }
 
     @Override
@@ -997,16 +1016,8 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
             bigMenor = bigMayor;
             bigMayor = tmp;
         }
-        byte[] tmp = new byte[max];
-        for (int i = 1; i <= min; i++) {
-            tmp[tmp.length - i] = bigMenor[bigMenor.length - i];
-        }
-        if (bigMenor[0] < 0) {
-            for (int i = min + 1; i <= tmp.length; i++) {
-                tmp[tmp.length - i] = (byte) 255; // All ones.
-            }
-        }
-        bigMenor = tmp;
+        
+        bigMenor = extendTheSize(bigMenor, max);
 
         byte[] result = new byte[max];
         for (int i = 0; i < max; i++) {
@@ -1181,16 +1192,8 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
             bigMenor = bigMayor;
             bigMayor = tmp;
         }
-        byte[] tmp = new byte[max];
-        for (int i = 1; i <= min; i++) {
-            tmp[tmp.length - i] = bigMenor[bigMenor.length - i];
-        }
-        if (bigMenor[0] < 0) {
-            for (int i = min + 1; i <= tmp.length; i++) {
-                tmp[tmp.length - i] = (byte) 255; // All ones.
-            }
-        }
-        bigMenor = tmp;
+        
+        bigMenor = extendTheSize(bigMenor, max);
 
         byte[] result = new byte[max];
         for (int i = 0; i < max; i++) {
