@@ -331,7 +331,7 @@ public class BigIntegerBytesListTest {
         AbstractBigInteger big2 = createNumber("21474832");
         assertEquals(bigOriginal2.abs().toString(), big2.abs().toString());
     }
-    
+
     @Test
     public void testAbs2() {
         java.math.BigInteger bigOriginal1 = new java.math.BigInteger("-0");
@@ -590,6 +590,18 @@ public class BigIntegerBytesListTest {
         big1 = createNumber("245789123");
         big2 = createNumber("0");
         assertEquals(bigOriginal1.multiply(bigOriginal2).toString(), big1.multiply(big2).toString());
+
+        bigOriginal1 = new java.math.BigInteger("0");
+        bigOriginal2 = new java.math.BigInteger("845612");
+        big1 = createNumber("0");
+        big2 = createNumber("845612");
+        assertEquals(bigOriginal1.multiply(bigOriginal2).toString(), big1.multiply(big2).toString());
+
+        bigOriginal1 = new java.math.BigInteger("0");
+        bigOriginal2 = new java.math.BigInteger("0");
+        big1 = createNumber("0");
+        big2 = createNumber("0");
+        assertEquals(bigOriginal1.multiply(bigOriginal2).toString(), big1.multiply(big2).toString());
     }
 
     @Test
@@ -757,7 +769,7 @@ public class BigIntegerBytesListTest {
         String my = Arrays.toString(big1.divideAndRemainder(big2));
         assertEquals(orig, my);
     }
-    
+
     @Test
     public void testDivideAndRemainder7() {
         java.math.BigInteger bigOriginal1 = new java.math.BigInteger("-550");
@@ -768,7 +780,7 @@ public class BigIntegerBytesListTest {
         String my = Arrays.toString(big1.divideAndRemainder(big2));
         assertEquals(orig, my);
     }
-    
+
     @Test
     public void testDivide8() {
         java.math.BigInteger bigOriginal1 = new java.math.BigInteger("0");
@@ -783,7 +795,7 @@ public class BigIntegerBytesListTest {
         big2 = createNumber("1");
         assertEquals(bigOriginal1.divide(bigOriginal2).toString(), big1.divide(big2).toString());
     }
-    
+
     @Test
     public void testDivide9() {
         java.math.BigInteger bigOriginal1 = new java.math.BigInteger("2540");
@@ -871,7 +883,7 @@ public class BigIntegerBytesListTest {
         String my = Arrays.toString(big.toByteArray());
         assertEquals(orig, my);
     }
-    
+
     // TEST shiftRight(int n)
     @Test
     public void testShiftRight1() {
@@ -879,35 +891,35 @@ public class BigIntegerBytesListTest {
         AbstractBigInteger big1 = createNumber("245");
         assertEquals(bigOriginal1.shiftRight(5).toString(), big1.shiftRight(5).toString());
     }
-    
+
     @Test
     public void testShiftRight2() {
         java.math.BigInteger bigOriginal1 = new java.math.BigInteger("2484564865219846512894562138465125");
         AbstractBigInteger big1 = createNumber("2484564865219846512894562138465125");
         assertEquals(bigOriginal1.shiftRight(26).toString(), big1.shiftRight(26).toString());
     }
-    
+
     @Test
     public void testShiftRight3() {
         java.math.BigInteger bigOriginal1 = new java.math.BigInteger("-248456486521984651289");
         AbstractBigInteger big1 = createNumber("-248456486521984651289");
         assertEquals(bigOriginal1.shiftRight(8).toString(), big1.shiftRight(8).toString());
     }
-    
+
     @Test
     public void testShiftRight4() {
         java.math.BigInteger bigOriginal1 = new java.math.BigInteger("0");
         AbstractBigInteger big1 = createNumber("0");
         assertEquals(bigOriginal1.shiftRight(2).toString(), big1.shiftRight(2).toString());
     }
-    
+
     @Test
     public void testShiftRight5() {
         java.math.BigInteger bigOriginal1 = new java.math.BigInteger("-156");
         AbstractBigInteger big1 = createNumber("-156");
         assertEquals(bigOriginal1.shiftRight(2).toString(), big1.shiftRight(2).toString());
     }
-    
+
     @Test
     public void testShiftRight6() {
         java.math.BigInteger bigOriginal1 = new java.math.BigInteger("6");
@@ -1466,61 +1478,63 @@ public class BigIntegerBytesListTest {
         AbstractBigInteger big1 = createNumber(1, new byte[]{-1, 120, -50, 62, 98, -1, -11});
         assertEquals(bigOriginal1.toString(), big1.toString());
     }
-    
+
     @Test
     public void testConstructorBytesMagnitude2() {
-        java.math.BigInteger bigOriginal1 = new java.math.BigInteger(1, new byte[]{1,5,8,9,15,1,-96,-98,-85,57,12,120,-127,127,-128});
-        AbstractBigInteger big1 = createNumber(1, new byte[]{1,5,8,9,15,1,-96,-98,-85,57,12,120,-127,127,-128});
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger(1, new byte[]{1, 5, 8, 9, 15, 1, -96, -98, -85, 57, 12, 120, -127, 127, -128});
+        AbstractBigInteger big1 = createNumber(1, new byte[]{1, 5, 8, 9, 15, 1, -96, -98, -85, 57, 12, 120, -127, 127, -128});
         assertEquals(bigOriginal1.toString(), big1.toString());
     }
-    
+
     @Test
     public void testConstructorBytesMagnitude3() {
-        java.math.BigInteger bigOriginal1 = new java.math.BigInteger(-1, new byte[]{1,5,8,9,15,1,-96,-98,-85,57,12,120,-127,127,-128});
-        AbstractBigInteger big1 = createNumber(-1, new byte[]{1,5,8,9,15,1,-96,-98,-85,57,12,120,-127,127,-128});
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger(-1, new byte[]{1, 5, 8, 9, 15, 1, -96, -98, -85, 57, 12, 120, -127, 127, -128});
+        AbstractBigInteger big1 = createNumber(-1, new byte[]{1, 5, 8, 9, 15, 1, -96, -98, -85, 57, 12, 120, -127, 127, -128});
         assertEquals(bigOriginal1.toString(), big1.toString());
     }
-    
+
     @Test
     public void testConstructorBytesMagnitude4() {
         exception.expect(NumberFormatException.class);
-        AbstractBigInteger big1 = createNumber(0, new byte[]{1,5,8});
+        AbstractBigInteger big1 = createNumber(0, new byte[]{1, 5, 8});
     }
-    
+
     @Test
     public void testConstructorBytesMagnitude5() {
         java.math.BigInteger bigOriginal1 = new java.math.BigInteger(0, new byte[]{});
         AbstractBigInteger big1 = createNumber(0, new byte[]{});
         assertEquals(bigOriginal1.toString(), big1.toString());
     }
-    
+
     @Test
     public void testConstructorBytesMagnitude6() {
         java.math.BigInteger bigOriginal1 = new java.math.BigInteger(1, new byte[]{});
         AbstractBigInteger big1 = createNumber(1, new byte[]{});
         assertEquals(bigOriginal1.toString(), big1.toString());
     }
-    
+
     @Test
     public void testConstructorBytesMagnitude7() {
-        java.math.BigInteger bigOriginal1 = new java.math.BigInteger(1, new byte[]{0,0,0,0});
-        AbstractBigInteger big1 = createNumber(1, new byte[]{0,0,0,0});
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger(1, new byte[]{0, 0, 0, 0});
+        AbstractBigInteger big1 = createNumber(1, new byte[]{0, 0, 0, 0});
         assertEquals(bigOriginal1.toString(), big1.toString());
     }
-    
+
     @Test
     public void testConstructorBytesMagnitude8() {
-        java.math.BigInteger bigOriginal1 = new java.math.BigInteger(1, new byte[]{-1,-15,-56,-85});
-        AbstractBigInteger big1 = createNumber(1, new byte[]{-1,-15,-56,-85});
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger(1, new byte[]{-1, -15, -56, -85});
+        AbstractBigInteger big1 = createNumber(1, new byte[]{-1, -15, -56, -85});
         assertEquals(bigOriginal1.toString(), big1.toString());
     }
-    
+
     @Test
     public void testConstructorBytesMagnitude9() {
         exception.expect(NumberFormatException.class);
-        AbstractBigInteger big1 = createNumber(10, new byte[]{-1,-15});
+        AbstractBigInteger big1 = createNumber(10, new byte[]{-1, -15});
     }
+
     //Test signum()
+
     @Test
     public void testSignum() {
         java.math.BigInteger bigOriginal = new java.math.BigInteger("25669856555");
@@ -1546,7 +1560,7 @@ public class BigIntegerBytesListTest {
 
     //Test pow()
     @Test
-    public void testPow() {
+    public void testPow1() {
         java.math.BigInteger bigO = new BigInteger("256");
         AbstractBigInteger big = createNumber("256");
         assertEquals(bigO.pow(7).toString(), big.pow(7).toString());
@@ -1628,7 +1642,7 @@ public class BigIntegerBytesListTest {
     }
 
     //Test gcd
-    public void testGcd() {
+    public void testGcd1() {
         java.math.BigInteger bigO = new BigInteger("5869854");
         AbstractBigInteger big = createNumber("5869854");
         assertEquals(bigO.gcd(new BigInteger("4589")).toString(), big.gcd(createNumber("4589")).toString());
@@ -1652,7 +1666,38 @@ public class BigIntegerBytesListTest {
         java.math.BigInteger bigO5 = new BigInteger("0");
         AbstractBigInteger big5 = createNumber("0");
         assertEquals(bigO5.gcd(new BigInteger("0")).toString(), big5.gcd(createNumber("0")).toString());
+    }
 
+    public void testGcd2() {
+        java.math.BigInteger bigO = new BigInteger("-5869854");
+        AbstractBigInteger big = createNumber("-5869854");
+        assertEquals(bigO.gcd(new BigInteger("-4589")).toString(), big.gcd(createNumber("-4589")).toString());
+
+        java.math.BigInteger bigO1 = new BigInteger("-48");
+        AbstractBigInteger big1 = createNumber("-48");
+        assertEquals(bigO1.gcd(new BigInteger("-60")).toString(), big1.gcd(createNumber("-60")).toString());
+
+        java.math.BigInteger bigO2 = new BigInteger("-60");
+        AbstractBigInteger big2 = createNumber("-60");
+        assertEquals(bigO2.gcd(new BigInteger("-48")).toString(), big2.gcd(createNumber("-48")).toString());
+
+        java.math.BigInteger bigO3 = new BigInteger("-589621");
+        AbstractBigInteger big3 = createNumber("-589621");
+        assertEquals(bigO3.gcd(new BigInteger("0")).toString(), big3.gcd(createNumber("0")).toString());
+
+        java.math.BigInteger bigO4 = new BigInteger("0");
+        AbstractBigInteger big4 = createNumber("0");
+        assertEquals(bigO4.gcd(new BigInteger("-589962")).toString(), big4.gcd(createNumber("-589962")).toString());
+
+        java.math.BigInteger bigO5 = new BigInteger("0");
+        AbstractBigInteger big5 = createNumber("0");
+        assertEquals(bigO5.gcd(new BigInteger("0")).toString(), big5.gcd(createNumber("0")).toString());
+    }
+
+    public void testGcdExtreme() {
+        java.math.BigInteger bigO = new BigInteger("89465184651235869854");
+        AbstractBigInteger big = createNumber("89465184651235869854");
+        assertEquals(bigO.gcd(new BigInteger("7984651324589")).toString(), big.gcd(createNumber("7984651324589")).toString());
     }
 
     //Test setBit()

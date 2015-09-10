@@ -229,6 +229,11 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return bigAbs;
     }
 
+    /**
+     * Returns a BigInteger whose value is (this + val).
+     * @param val value to be added to this BigInteger.
+     * @return this + val
+     */
     @Override
     public BigIntegerBytesList add(BigIntegerBytesList val) {
         BigIntegerBytesList result = null;
@@ -488,6 +493,12 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return res;
     }
 
+    /**
+     * Returns a BigInteger whose value is equivalent to this BigInteger with the designated bit flipped. (Computes (this ^ (1<<n)).)
+     * @param n index of bit to flip.
+     * @return this ^ (1<<n)
+     * @throws ArithmeticException n is negative.
+     */
     @Override
     public BigIntegerBytesList flipBit(int n) {
         if (n < 0) {
@@ -512,18 +523,22 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return res;
     }
 
+    /**
+     * Returns a BigInteger whose value is the greatest common divisor of abs(this) and abs(val). Returns 0 if this==0 && val==0.
+     * @param val value with which the GCD is to be computed.
+     * @return GCD(abs(this), abs(val))
+     */
     @Override
     public BigIntegerBytesList gcd(BigIntegerBytesList val) {
-
-        if (val.equals(ZERO)) {
-            return this;
+        BigIntegerBytesList a = (BigIntegerBytesList) this.clone();
+        BigIntegerBytesList b = (BigIntegerBytesList) val.clone();
+        if (b.equals(ZERO)) {
+            return a;
         }
-        if (this.equals(ZERO)) {
-            return val;
+        if (a.equals(ZERO)) {
+            return b;
         }
 
-        BigIntegerBytesList a = this;
-        BigIntegerBytesList b = val;
         if (a.compareTo(b) > 0) {
             BigIntegerBytesList aux = b;
             b = a;
@@ -921,6 +936,11 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return r;
     }
 
+    /**
+     * Returns a BigInteger whose value is (this * val).
+     * @param val value to be multiplied by this BigInteger.
+     * @return this * val
+     */
     @Override
     public BigIntegerBytesList multiply(BigIntegerBytesList val) {
         StandardMultiplication sm = new StandardMultiplication();
@@ -997,6 +1017,12 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return res;
     }
 
+    /**
+     * Returns a BigInteger whose value is (this^exponent). Note that exponent is an integer rather than a BigInteger.
+     * @param exponent exponent to which this BigInteger is to be raised.
+     * @return this^exponent
+     * @throws ArithmeticException - exponent is negative. (This would cause the operation to yield a non-integer value.)
+     */
     @Override
     public BigIntegerBytesList pow(int exponent) {
         if (exponent < 0) {
