@@ -506,6 +506,21 @@ public class BigIntegerBytesListTest {
         big2 = createNumber("-002");
         assertEquals(bigOriginal1.subtract(bigOriginal2).toString(), big1.subtract(big2).toString());
     }
+    
+    @Test
+    public void testSubstract7() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("-9000");
+        java.math.BigInteger bigOriginal2 = new java.math.BigInteger("8000");
+        AbstractBigInteger big1 = createNumber("-9000");
+        AbstractBigInteger big2 = createNumber("8000");
+        assertEquals(bigOriginal1.subtract(bigOriginal2).toString(), big1.subtract(big2).toString());
+
+        bigOriginal1 = new java.math.BigInteger("-37892");
+        bigOriginal2 = new java.math.BigInteger("16221");
+        big1 = createNumber("-37892");
+        big2 = createNumber("16221");
+        assertEquals(bigOriginal1.subtract(bigOriginal2).toString(), big1.subtract(big2).toString());
+    }
 
     @Test
     public void testSubstractExtreme() {
@@ -1307,6 +1322,20 @@ public class BigIntegerBytesListTest {
     }
     
     @Test
+    public void testBitCount4() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("-9");
+        AbstractBigInteger big1 = createNumber("-9");
+        assertEquals(bigOriginal1.bitCount(), big1.bitCount());
+    }
+    
+    @Test
+    public void testBitCount5() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("-91");
+        AbstractBigInteger big1 = createNumber("-91");
+        assertEquals(bigOriginal1.bitCount(), big1.bitCount());
+    }
+    
+    @Test
     public void testBitCountExtreme() {
         java.math.BigInteger bigOriginal1 = new java.math.BigInteger("845612384651284651328465132846513264578465312");
         AbstractBigInteger big1 = createNumber("845612384651284651328465132846513264578465312");
@@ -1341,6 +1370,29 @@ public class BigIntegerBytesListTest {
         AbstractBigInteger big1 = createNumber("48651846513248651234512");
         assertEquals(bigOriginal1.bitLength(), big1.bitLength());
     }
+    
+    // TEST negate
+    @Test
+    public void testNegate1() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("789456");
+        AbstractBigInteger big1 = createNumber("789456");
+        assertEquals(bigOriginal1.negate().toString(), big1.negate().toString());
+    }
+    
+    @Test
+    public void testNegate2() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("-789456");
+        AbstractBigInteger big1 = createNumber("-789456");
+        assertEquals(bigOriginal1.negate().toString(), big1.negate().toString());
+    }
+    
+    @Test
+    public void testNegate3() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("0");
+        AbstractBigInteger big1 = createNumber("0");
+        assertEquals(bigOriginal1.negate().toString(), big1.negate().toString());
+    }
+    
     
     // TEST not
     @Test

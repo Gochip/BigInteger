@@ -376,12 +376,11 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         String binary = toString(2);
         int count = 0;
         char symbol = '0';
-        int since = 0;
         if (this.negative) {
             symbol = '1';
-            since = 1; // Excluyo el símbolo -.
+            binary = complement(binary.substring(1));
         }
-        for (int i = since; i < binary.length(); i++) {
+        for (int i = 0; i < binary.length(); i++) {
             if (binary.charAt(i) != symbol) {
                 count++;
             }
@@ -661,6 +660,10 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return res;
     }
 
+    /**
+     * Returns a BigInteger whose value is (-this).
+     * @return -this
+     */
     @Override
     public BigIntegerBytesList negate() {
         BigIntegerBytesList bigNeg = new BigIntegerBytesList("0");
@@ -672,6 +675,11 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return bigNeg;
     }
 
+    /**
+     * Returns a BigInteger whose value is (this - val).
+     * @param val value to be subtracted from this BigInteger.
+     * @return this - val
+     */
     @Override
     public BigIntegerBytesList subtract(BigIntegerBytesList val) {
         BigIntegerBytesList minuendo = this;
