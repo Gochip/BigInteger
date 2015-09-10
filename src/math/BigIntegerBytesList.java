@@ -7,7 +7,7 @@ import java.util.Random;
 
 /**
  *
- * @author Parisi Germán
+ * @author Parisi Germán, Bertola Federico
  * @version 1.0
  */
 public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList> {
@@ -17,7 +17,7 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     public static final BigIntegerBytesList TWO = new BigIntegerBytesList("2");
     public static final BigIntegerBytesList TEN = new BigIntegerBytesList("10");
     private static final char LETTERS_MINUS[] = new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-    private static final char LETTERS_MAYUS[] = new char[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+    //private static final char LETTERS_MAYUS[] = new char[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
 
     /**
      * The digits in big-endian. Each digit represent 0 to 9.
@@ -612,11 +612,6 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
             return b;
         }
 
-        if (a.compareTo(b) > 0) {
-            BigIntegerBytesList aux = b;
-            b = a;
-            a = aux;
-        }
         while (!b.equals(ZERO)) {
             BigIntegerBytesList r = a.mod(b);
             a = b;

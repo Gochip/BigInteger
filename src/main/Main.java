@@ -1,6 +1,5 @@
 package main;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Random;
 import math.AbstractBigInteger;
@@ -18,8 +17,8 @@ public class Main {
     public static void main(String args[]) {
 //        System.out.println(Integer.toBinaryString(-5));
 
-        System.out.println(new java.math.BigInteger("-9").bitCount());
-        System.out.println(new math.BigIntegerBytesList("-9").bitCount());
+        System.out.println(new java.math.BigInteger("2").modInverse(new java.math.BigInteger("6")));
+        System.out.println(new math.BigIntegerBytesList("25032").divideAndRemainder(new BigIntegerBytesList("250"))[0]);
         
         //System.out.println(Integer.parseInt("4865123894657451238465218645123846521384653121284652148651238946574512384652186451238465213846531212846521486512389465745123846521864512384652138465312128465214865123894657451238465218645123846521384653121284652148651238946574512384652186451238465213846531212846521486512389465745123846521864512384652"));
 //        System.out.println(new java.math.BigInteger("-8888").shiftRight(8));

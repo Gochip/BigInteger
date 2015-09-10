@@ -1930,8 +1930,8 @@ public class BigIntegerBytesListTest {
     }
 
     public void testGcdExtreme() {
-        java.math.BigInteger bigO = new BigInteger("89465184651235869854");
-        AbstractBigInteger big = createNumber("89465184651235869854");
+        java.math.BigInteger bigO = new BigInteger("894651846512358698584651248651244561238465132");
+        AbstractBigInteger big = createNumber("894651846512358698584651248651244561238465132");
         assertEquals(bigO.gcd(new BigInteger("7984651324589")).toString(), big.gcd(createNumber("7984651324589")).toString());
     }
 
