@@ -757,6 +757,47 @@ public class BigIntegerBytesListTest {
         String my = Arrays.toString(big1.divideAndRemainder(big2));
         assertEquals(orig, my);
     }
+    
+    @Test
+    public void testDivideAndRemainder7() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("-550");
+        java.math.BigInteger bigOriginal2 = new java.math.BigInteger("-550");
+        AbstractBigInteger big1 = createNumber("-550");
+        AbstractBigInteger big2 = createNumber("-550");
+        String orig = Arrays.toString(bigOriginal1.divideAndRemainder(bigOriginal2));
+        String my = Arrays.toString(big1.divideAndRemainder(big2));
+        assertEquals(orig, my);
+    }
+    
+    @Test
+    public void testDivide8() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("0");
+        java.math.BigInteger bigOriginal2 = new java.math.BigInteger("123");
+        AbstractBigInteger big1 = createNumber("0");
+        AbstractBigInteger big2 = createNumber("123");
+        assertEquals(bigOriginal1.divide(bigOriginal2).toString(), big1.divide(big2).toString());
+
+        bigOriginal1 = new java.math.BigInteger("100");
+        bigOriginal2 = new java.math.BigInteger("1");
+        big1 = createNumber("100");
+        big2 = createNumber("1");
+        assertEquals(bigOriginal1.divide(bigOriginal2).toString(), big1.divide(big2).toString());
+    }
+    
+    @Test
+    public void testDivide9() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("2540");
+        java.math.BigInteger bigOriginal2 = new java.math.BigInteger("2550");
+        AbstractBigInteger big1 = createNumber("2540");
+        AbstractBigInteger big2 = createNumber("2550");
+        assertEquals(bigOriginal1.divide(bigOriginal2).toString(), big1.divide(big2).toString());
+
+        bigOriginal1 = new java.math.BigInteger("-2530");
+        bigOriginal2 = new java.math.BigInteger("-2550");
+        big1 = createNumber("-2530");
+        big2 = createNumber("-2550");
+        assertEquals(bigOriginal1.divide(bigOriginal2).toString(), big1.divide(big2).toString());
+    }
 
     // TEST toByteArray
     @Test

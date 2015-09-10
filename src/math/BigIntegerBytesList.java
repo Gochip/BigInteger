@@ -394,18 +394,35 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return resp;
     }
 
+    /**
+     * Returns a BigInteger whose value is (this / val).
+     *
+     * @param val value by which this BigInteger is to be divided.
+     * @return this / val
+     * @throws ArithmeticException if val is zero.
+     */
     @Override
     public BigIntegerBytesList divide(BigIntegerBytesList val) {
         return divideAndRemainder(val)[0];
     }
 
+    /**
+     * Returns an array of two BigIntegers containing (this / val) followed by
+     * (this % val).
+     *
+     * @param val value by which this BigInteger is to be divided, and the
+     * remainder computed.
+     * @return an array of two BigIntegers: the quotient (this / val) is the
+     * initial element, and the remainder (this % val) is the final element.
+     * @throws ArithmeticException if val is zero.
+     */
     @Override
     public BigIntegerBytesList[] divideAndRemainder(BigIntegerBytesList val) {
         if (val.equals(ZERO)) {
             throw new ArithmeticException("BigInteger divide by zero");
         }
         BigIntegerBytesList dividendo = this.abs();
-        BigIntegerBytesList divisor = (BigIntegerBytesList) val.abs();
+        BigIntegerBytesList divisor = val.abs();
 
         StringBuilder quotientString = new StringBuilder();
         int n = dividendo.digits.size();
@@ -413,34 +430,40 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         int d1 = dividendo.digits.get(i).getDigit();
         BigIntegerBytesList tmp = new BigIntegerBytesList(String.valueOf(d1));
         BigIntegerBytesList remainder = ZERO;
+        // Selecciono los primeros digitos mayores que el divisor.
+        // Si no es mayor, selecciono todos.
         while (tmp.compareTo(divisor) < 0 && i < n - 1) {
             i++;
             d1 = dividendo.digits.get(i).getDigit();
             tmp.digits.add(new Digit((byte) d1));
         }
-        if (i == n) {
-            quotientString.append("0");
-        } else {
-            int r = inside(tmp, divisor);
-            i++;
-            quotientString.append(String.valueOf(r));
-            BigIntegerBytesList mult = divisor.multiply(new BigIntegerBytesList(String.valueOf(r)));
-            remainder = tmp.subtract(mult);
-            for (; i < n; i++) {
-                String remainderString = remainder.toString();
-                d1 = dividendo.digits.get(i).getDigit();
-                remainderString += d1;
-                remainder = new BigIntegerBytesList(remainderString);
-                if (remainder.compareTo(divisor) < 0) {
-                    r = 0;
-                } else {
-                    r = inside(remainder, divisor);
-                }
-                quotientString.append(String.valueOf(r));
-                mult = divisor.multiply(new BigIntegerBytesList(String.valueOf(r)));
-                remainder = remainder.subtract(mult);
+
+        int times = inside(tmp, divisor);
+        i++;
+        quotientString.append(String.valueOf(times));
+        
+        // Multiplico divisor por el cociente.
+        BigIntegerBytesList mult = divisor.multiply(new BigIntegerBytesList(String.valueOf(times)));
+        
+        // Hago la resta.
+        remainder = tmp.subtract(mult);
+        
+        // A partir de este momento aplico el algoritmo de la división.
+        for (; i < n; i++) {
+            String remainderString = remainder.toString();
+            d1 = dividendo.digits.get(i).getDigit();
+            remainderString += d1;
+            remainder = new BigIntegerBytesList(remainderString);
+            if (remainder.compareTo(divisor) < 0) {
+                times = 0;
+            } else {
+                times = inside(remainder, divisor);
             }
+            quotientString.append(String.valueOf(times));
+            mult = divisor.multiply(new BigIntegerBytesList(String.valueOf(times)));
+            remainder = remainder.subtract(mult);
         }
+
         BigIntegerBytesList quotient = new BigIntegerBytesList(quotientString.toString());
         quotient.negative = this.negative != ((BigIntegerBytesList) val).negative;
         remainder.negative = this.negative;
@@ -668,8 +691,8 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
     }
 
     /**
-     * Cuantas veces está big2 en big1. Sabiendo que no puede estar más de 9
-     * veces.
+     * Retorna cuantas veces está big2 en big1. Sabiendo que no puede estar más
+     * de 9 veces.
      *
      * @param big1
      * @param big2
@@ -684,6 +707,9 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
             tmp = tmp.add(big2);
             r++;
         }
+        // Si me paso en el while anterior resto uno.
+        // Me doy cuenta que me paso cuando comp vale = -1 porque si vale 0
+        // es porque big1 es múltiplo de big2.
         if (comp != 0) {
             r--;
         }
