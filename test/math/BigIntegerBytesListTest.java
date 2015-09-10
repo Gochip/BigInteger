@@ -899,6 +899,49 @@ public class BigIntegerBytesListTest {
         assertEquals(orig, my);
     }
 
+    // TEST shiftLeft
+    @Test
+    public void testShiftLeft1() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("245");
+        AbstractBigInteger big1 = createNumber("245");
+        assertEquals(bigOriginal1.shiftLeft(5).toString(), big1.shiftLeft(5).toString());
+    }
+
+    @Test
+    public void testShiftLeft2() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("2484564865219846512894562138465125");
+        AbstractBigInteger big1 = createNumber("2484564865219846512894562138465125");
+        assertEquals(bigOriginal1.shiftLeft(26).toString(), big1.shiftLeft(26).toString());
+    }
+
+    @Test
+    public void testShiftLeft3() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("-248456486521984651289");
+        AbstractBigInteger big1 = createNumber("-248456486521984651289");
+        assertEquals(bigOriginal1.shiftLeft(8).toString(), big1.shiftLeft(8).toString());
+    }
+
+    @Test
+    public void testShiftLeft4() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("0");
+        AbstractBigInteger big1 = createNumber("0");
+        assertEquals(bigOriginal1.shiftLeft(2).toString(), big1.shiftLeft(2).toString());
+    }
+
+    @Test
+    public void testShiftLeft5() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("-156");
+        AbstractBigInteger big1 = createNumber("-156");
+        assertEquals(bigOriginal1.shiftLeft(2).toString(), big1.shiftLeft(2).toString());
+    }
+
+    @Test
+    public void testShiftLeft6() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("6");
+        AbstractBigInteger big1 = createNumber("6");
+        assertEquals(bigOriginal1.shiftRight(4).toString(), big1.shiftRight(4).toString());
+    }
+    
     // TEST shiftRight(int n)
     @Test
     public void testShiftRight1() {
@@ -1035,12 +1078,94 @@ public class BigIntegerBytesListTest {
 
     // TEST max
     @Test
-    public void testMax() {
+    public void testMax1() {
         java.math.BigInteger bigOriginal1 = new java.math.BigInteger("-789456");
         java.math.BigInteger bigOriginal2 = new java.math.BigInteger("789456");
         AbstractBigInteger big1 = createNumber("-789456");
         AbstractBigInteger big2 = createNumber("789456");
         assertEquals(bigOriginal1.max(bigOriginal2).toString(), big1.max(big2).toString());
+    }
+    
+    @Test
+    public void testMax2() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("452");
+        java.math.BigInteger bigOriginal2 = new java.math.BigInteger("789456");
+        AbstractBigInteger big1 = createNumber("452");
+        AbstractBigInteger big2 = createNumber("789456");
+        assertEquals(bigOriginal1.max(bigOriginal2).toString(), big1.max(big2).toString());
+    }
+    
+    @Test
+    public void testMax3() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("457");
+        java.math.BigInteger bigOriginal2 = new java.math.BigInteger("451");
+        AbstractBigInteger big1 = createNumber("457");
+        AbstractBigInteger big2 = createNumber("451");
+        assertEquals(bigOriginal1.max(bigOriginal2).toString(), big1.max(big2).toString());
+    }
+    
+    @Test
+    public void testMax4() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("100");
+        java.math.BigInteger bigOriginal2 = new java.math.BigInteger("100");
+        AbstractBigInteger big1 = createNumber("100");
+        AbstractBigInteger big2 = createNumber("100");
+        assertEquals(bigOriginal1.max(bigOriginal2).toString(), big1.max(big2).toString());
+    }
+    
+    @Test
+    public void testMax5() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("0");
+        java.math.BigInteger bigOriginal2 = new java.math.BigInteger("100");
+        AbstractBigInteger big1 = createNumber("0");
+        AbstractBigInteger big2 = createNumber("100");
+        assertEquals(bigOriginal1.max(bigOriginal2).toString(), big1.max(big2).toString());
+    }
+    
+    // TEST min
+    @Test
+    public void testMin1() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("-789456");
+        java.math.BigInteger bigOriginal2 = new java.math.BigInteger("789456");
+        AbstractBigInteger big1 = createNumber("-789456");
+        AbstractBigInteger big2 = createNumber("789456");
+        assertEquals(bigOriginal1.min(bigOriginal2).toString(), big1.min(big2).toString());
+    }
+    
+    @Test
+    public void testMin2() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("452");
+        java.math.BigInteger bigOriginal2 = new java.math.BigInteger("789456");
+        AbstractBigInteger big1 = createNumber("452");
+        AbstractBigInteger big2 = createNumber("789456");
+        assertEquals(bigOriginal1.min(bigOriginal2).toString(), big1.min(big2).toString());
+    }
+    
+    @Test
+    public void testMin3() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("457");
+        java.math.BigInteger bigOriginal2 = new java.math.BigInteger("451");
+        AbstractBigInteger big1 = createNumber("457");
+        AbstractBigInteger big2 = createNumber("451");
+        assertEquals(bigOriginal1.min(bigOriginal2).toString(), big1.min(big2).toString());
+    }
+    
+    @Test
+    public void testMin4() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("100");
+        java.math.BigInteger bigOriginal2 = new java.math.BigInteger("100");
+        AbstractBigInteger big1 = createNumber("100");
+        AbstractBigInteger big2 = createNumber("100");
+        assertEquals(bigOriginal1.min(bigOriginal2).toString(), big1.min(big2).toString());
+    }
+    
+    @Test
+    public void testMin5() {
+        java.math.BigInteger bigOriginal1 = new java.math.BigInteger("0");
+        java.math.BigInteger bigOriginal2 = new java.math.BigInteger("100");
+        AbstractBigInteger big1 = createNumber("0");
+        AbstractBigInteger big2 = createNumber("100");
+        assertEquals(bigOriginal1.min(bigOriginal2).toString(), big1.min(big2).toString());
     }
 
     // TEST and
@@ -1872,7 +1997,26 @@ public class BigIntegerBytesListTest {
         assertEquals(bigBase.modPow(bigExp, bigMod).toString(), bigBase2.modPow(bigExp2, bigMod2).toString());
     }
 
-    //Test
+    // TEST modInverse
+    @Test
+    public void testModInverse1() {
+        java.math.BigInteger bigBase = new BigInteger("58");
+        java.math.BigInteger bigMod = new BigInteger("35");
+        AbstractBigInteger bigBase2 = createNumber("58");
+        AbstractBigInteger bigMod2 = createNumber("35");
+        assertEquals(bigBase.modInverse(bigMod).toString(), bigBase2.modInverse(bigMod2).toString());
+    }
+    
+    @Test
+    public void testModInverse2() {
+        java.math.BigInteger bigBase = new BigInteger("846518465132861");
+        java.math.BigInteger bigMod = new BigInteger("7845");
+        AbstractBigInteger bigBase2 = createNumber("846518465132861");
+        AbstractBigInteger bigMod2 = createNumber("7845");
+        assertEquals(bigBase.modInverse(bigMod).toString(), bigBase2.modInverse(bigMod2).toString());
+    }
+    
+    //Test TestBit
     @Test
     public void testTestBit() {
         java.math.BigInteger bigO = new BigInteger("2548");

@@ -218,6 +218,10 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         this.digits = result.digits;
     }
 
+    /**
+     * Returns a BigInteger whose value is the absolute value of this BigInteger.
+     * @return abs(this)
+     */
     @Override
     public BigIntegerBytesList abs() {
         BigIntegerBytesList bigAbs = new BigIntegerBytesList("0");
@@ -699,6 +703,10 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return big;
     }
 
+    /**
+     * Returns a byte array containing the two's-complement representation of this BigInteger. The byte array will be in big-endian byte-order: the most significant byte is in the zeroth element. The array will contain the minimum number of bytes required to represent this BigInteger, including at least one sign bit, which is (ceil((this.bitLength() + 1)/8)). (This representation is compatible with the (byte[]) constructor.)
+     * @return a byte array containing the two's-complement representation of this BigInteger.
+     */
     @Override
     public byte[] toByteArray() {
         byte[] result = null;
@@ -730,17 +738,23 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return result;
     }
 
-    private static String getBinaryRepresentation(BigIntegerBytesList quotient) {
+    /**
+     * Retorna una representación binaria de val.
+     * La cantidad de dígitos de esta representación es un múltiplo de 8.
+     * @param val
+     * @return 
+     */
+    private static String getBinaryRepresentation(BigIntegerBytesList val) {
         StringBuilder resultString = new StringBuilder();
-        while (quotient.abs().compareTo(ONE) != 0) {
-            BigIntegerBytesList[] tmp = quotient.divideAndRemainder(TWO);
-            quotient = tmp[0];
+        while (val.abs().compareTo(ONE) != 0) {
+            BigIntegerBytesList[] tmp = val.divideAndRemainder(TWO);
+            val = tmp[0];
             BigIntegerBytesList remainder = tmp[1];
             // Agrego los restos adelante y formo así un string en binario.
             resultString.insert(0, remainder.abs().toString());
         }
         resultString.insert(0, "1");
-        if (quotient.negative) {
+        if (val.negative) {
             // Si el número es negativo, calculo el complemento a dos.
             resultString = new StringBuilder(complement(resultString.toString()));
             resultString.insert(0, '1');
@@ -896,6 +910,10 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         }
     }
 
+    /**
+     * Returns the index of the rightmost (lowest-order) one bit in this BigInteger (the number of zero bits to the right of the rightmost one bit). Returns -1 if this BigInteger contains no one bits. (Computes (this==0? -1 : log2(this & -this)).)
+     * @return index of the rightmost one bit in this BigInteger.
+     */
     @Override
     public int getLowestSetBit() {
         if (this.equals(ZERO)) {
@@ -949,16 +967,32 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return esPrimo;
     }
 
+    /**
+     * Returns the maximum of this BigInteger and val.
+     * @param val value with which the minimum is to be computed.
+     * @return the BigInteger whose value is the lesser of this BigInteger and val. If they are equal, either may be returned.
+     */
     @Override
     public BigIntegerBytesList max(BigIntegerBytesList val) {
         return (this.compareTo(val) > 0) ? this : val;
     }
 
+    /**
+     * Returns the minimum of this BigInteger and val.
+     * @param val value with which the maximum is to be computed.
+     * @return the BigInteger whose value is the greater of this and val. If they are equal, either may be returned.
+     */
     @Override
     public BigIntegerBytesList min(BigIntegerBytesList val) {
         return (this.compareTo(val) < 0) ? this : val;
     }
 
+    /**
+     * Returns a BigInteger whose value is (this mod m). This method differs from remainder in that it always returns a non-negative BigInteger.
+     * @param val the modulus.
+     * @return this mod m
+     * @throws ArithmeticException - m ≤ 0
+     */
     @Override
     public BigIntegerBytesList mod(BigIntegerBytesList val) {
         if (val.signum() <= 0) {
@@ -972,6 +1006,12 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return res;
     }
 
+    /**
+     * Returns a BigInteger whose value is (this-1 mod m).
+     * @param m  the modulus.
+     * @return this^-1 mod m.
+     * @throws ArithmeticException - m ≤ 0, or this BigInteger has no multiplicative inverse mod m (that is, this BigInteger is not relatively prime to m).
+     */
     @Override
     public BigIntegerBytesList modInverse(BigIntegerBytesList m) {
         if (m.compareTo(ZERO) <= 0) {
@@ -1052,6 +1092,10 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return nextProbablePrime(100);
     }
 
+    /**
+     * Returns a BigInteger whose value is (~this). (This method returns a negative value if and only if this BigInteger is non-negative.)
+     * @return ~this
+     */
     @Override
     public BigIntegerBytesList not() {
         byte big[] = this.toByteArray();
@@ -1062,6 +1106,11 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return new BigIntegerBytesList(result);
     }
 
+    /**
+     * Returns a BigInteger whose value is (this | val). (This method returns a negative BigInteger if and only if either this or val is negative.)
+     * @param val value to be OR'ed with this BigInteger.
+     * @return this | val
+     */
     @Override
     public BigIntegerBytesList or(BigIntegerBytesList val) {
         byte[] bigMenor = toByteArray();
@@ -1121,6 +1170,12 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return res;
     }
 
+    /**
+     * Returns a BigInteger whose value is equivalent to this BigInteger with the designated bit set. (Computes (this | (1<<n)).)
+     * @param n index of bit to set.
+     * @return this | (1<<n)
+     * @throws ArithmeticException - n is negative.
+     */
     @Override
     public BigIntegerBytesList setBit(int n) {
         if (n < 0) {
@@ -1157,6 +1212,12 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return result;
     }
 
+    /**
+     * Returns a BigInteger whose value is (this << n). The shift distance, n, may be negative, in which case this method performs a right shift. (Computes floor(this * 2^n).)
+     * @param n shift distance, in bits.
+     * @return this << n
+     * @throws ArithmeticException - if the shift distance is Integer.MIN_VALUE.
+     */
     @Override
     public BigIntegerBytesList shiftLeft(int n) {
         if (n < 0) {
@@ -1171,6 +1232,12 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return result;
     }
 
+    /**
+     * Returns a BigInteger whose value is (this >> n). Sign extension is performed. The shift distance, n, may be negative, in which case this method performs a left shift. (Computes floor(this / 2n).)
+     * @param n shift distance, in bits.
+     * @return this >> n
+     * @throws ArithmeticException - if the shift distance is Integer.MIN_VALUE.
+     */
     @Override
     public BigIntegerBytesList shiftRight(int n) {
         if (n < 0) {
@@ -1199,6 +1266,10 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return result;
     }
 
+    /**
+     * Returns the signum function of this BigInteger.
+     * @return -1, 0 or 1 as the value of this BigInteger is negative, zero or positive.
+     */
     @Override
     public int signum() {
         int sig = 1;
@@ -1241,6 +1312,11 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return sb.toString();
     }
 
+    /**
+     * Returns a BigInteger whose value is (this ^ val). (This method returns a negative BigInteger if and only if exactly one of this and val are negative.)
+     * @param val value to be XOR'ed with this BigInteger.
+     * @return this ^ val
+     */
     @Override
     public BigIntegerBytesList xor(BigIntegerBytesList val) {
         byte[] bigMenor = toByteArray();
@@ -1267,6 +1343,12 @@ public class BigIntegerBytesList extends AbstractBigInteger<BigIntegerBytesList>
         return res;
     }
 
+    /**
+     * Returns true if and only if the designated bit is set. (Computes ((this & (1<<n)) != 0).)
+     * @param n index of bit to test.
+     * @return true if and only if the designated bit is set.
+     * @throws ArithmeticException - n is negative.
+     */
     @Override
     public boolean testBit(int n) {
         if (n < 0) {
